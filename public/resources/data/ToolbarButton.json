@@ -1,0 +1,26 @@
+{
+"menuData":
+	[
+		{
+			"name":"Upload Quotes",
+			"handler":'onClickButton',
+			"displaySequence":1
+			
+			
+			
+		},
+		{
+			"name":"Charts",
+			"handler":'onClickButton',
+			"displaySequence":2
+						
+		},
+		{
+			"name":"Compute P&L",
+			"handler":'onClickButton',
+			"displaySequence":3
+		
+		}
+	]
+
+}

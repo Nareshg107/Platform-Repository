@@ -1,0 +1,39 @@
+{
+"menuData":
+	[
+		{
+			"name":"Home",
+			"displaySequence":1,
+			"menuId":"marketSentiment",
+			"handler":"menuItemClickINSIGHTs"
+			
+		},
+		{
+			"name":"Dashboards",
+			"displaySequence":3,
+			"menuId":"marketSentiment",
+						
+		},
+		{
+			"name":"Data Views",
+			"displaySequence":3,
+			"menuId":"marketSentiment",
+						
+		},
+		{
+			"name":"Collections",
+			"displaySequence":3,
+			"menuId":"marketSentiment",
+			"handler":"menuItemClickINSIGHTs"
+						
+		}
+		,
+		{
+			"name":"Setups",
+			"displaySequence":3,
+			"menuId":"marketSentiment",
+						
+		}
+	]
+
+}

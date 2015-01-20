@@ -1,0 +1,34 @@
+{
+	"sideBarDetails":{
+		[
+			"name" : "Trading",
+			"displaySequence" : 1,
+			"handler":"tradingSideBarClick",
+			"isDefault": true
+		],
+		[
+			"name" : "Risk",
+			"displaySequence" : 2,
+			"handler":"riskSideBarClick",
+			"isDefault": false
+		],
+		[
+			"name" : "Cost",
+			"displaySequence" : 3,
+			"handler":"costSideBarClick",
+			"isDefault": false
+		],
+		[
+			"name" : "Asset Optimization",
+			"displaySequence" : 4,
+			"handler":"assetSideBarClick",
+			"isDefault": false
+		],
+		[
+			"name" : "User Management",
+			"displaySequence" : 5,
+			"handler":"userMangSideBarClick",
+			"isDefault": false
+		]
+	}
+}

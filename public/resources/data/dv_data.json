@@ -1,0 +1,98 @@
+[{
+    "name": "pl1",
+    "title": "Most profitable trade is Coal",
+    "thumb": "pdf.png",
+	"iconClass":"thumb-icon-factory",
+	"marketPosition":"thumb-positive",
+    "url": "resources/reports/Q42013Report.pdf",
+    "type": "P&L",
+    "uploaded": "12-Sep-2014"
+},{
+    "name": "q5",
+    "title": "P&L change from last run/EOD is 12%",
+    "thumb": "pdf.png",
+	"iconClass":"thumb-icon-money",
+	"marketPosition":"thumb-positive",
+    "url": "resources/reports/Q22013Report.pdf",
+    "type": "P&L",
+    "uploaded": "12-Sep-2014"
+},{
+    "name": "q4",
+    "title": "Most profitable customer is Peter",
+    "thumb": "pdf.png",
+	"iconClass":"thumb-icon-money",
+	"marketPosition":"thumb-negative",
+    "url": "resources/reports/Q12013Report.pdf",
+    "type": "P&L",
+    "uploaded": "12-Sep-2014"
+},{
+    "name": "q3",
+    "title": "Least profitable customer is Steve",
+    "thumb": "pdf.png",
+	"iconClass":"thumb-icon-money",
+	"marketPosition":"thumb-positive",
+    "url": "resources/reports/Q42012Report.pdf",
+    "type": "P&L",
+    "uploaded": "12-Sep-2014"
+},{
+    "name": "q2",
+    "title": "5 new deals done yesterday causing a loss/gain of 15%",
+    "thumb": "pdf.png",
+    "url": "resources/reports/Q32012Report.pdf",
+    "type": "P&L",
+    "uploaded": "12-Sep-2014"
+},{
+    "name": "q1",
+    "title": "Loss making deals affecting portfolio by 10% ",
+    "thumb": "pdf.png",
+	"iconClass":"thumb-icon-money",
+	"marketPosition":"thumb-positive",
+    "url": "resources/reports/Q22012Report.pdf",
+    "type": "P&L",
+    "uploaded": "12-Sep-2014"
+},{
+    "name": "q3",
+    "title": "Physical long\short for tomorrow",
+    "thumb": "pdf.png",
+	"iconClass":"thumb-icon-money",
+	"marketPosition":"thumb-positive",
+    "url": "resources/reports/Q12012Report.pdf",
+    "type": "Position",
+    "uploaded": "11-Sep-2014"
+},{
+    "name": "q2",
+    "title": "Physical long\Short for next month ",
+    "thumb": "pdf.png",
+	"iconClass":"thumb-icon-money",
+	"marketPosition":"thumb-positive",
+    "url": "resources/reports/Q12012Report.pdf",
+    "type": "Position",
+    "uploaded": "12-Sep-2014"
+},{
+    "name": "q1",
+    "title": "New deals done today",
+    "thumb": "pdf.png",
+	"iconClass":"thumb-icon-money",
+	"marketPosition":"thumb-positive",
+    "url": "resources/reports/Q12012Report.pdf",
+    "type": "Position",
+    "uploaded": "12-Sep-2014"
+},{
+    "name": "q2",
+    "title": "Deals pending approval for my criteria",
+    "thumb": "pdf.png",
+	"iconClass":"thumb-icon-money",
+	"marketPosition":"thumb-positive",
+    "url": "resources/reports/Q12012Report.pdf",
+    "type": "Trade Statistics",
+    "uploaded": "12-Sep-2014"
+},{
+    "name": "q1",
+    "title": "Number of Options that are about to expire for my criteria",
+    "thumb": "pdf.png",
+	"iconClass":"thumb-icon-money",
+	"marketPosition":"thumb-positive",
+    "url": "resources/reports/Q12012Report.pdf",
+    "type": "Trade Statistics",
+    "uploaded": "12-Sep-2014"
+}]

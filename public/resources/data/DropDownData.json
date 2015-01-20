@@ -1,0 +1,37 @@
+{
+"chartData":
+	[
+		{
+			"groupby":"Home",
+			"measure":"cal1"
+			
+			
+		},
+		{
+			"groupby":"Dashboards",
+			
+			"measure":"cal2"
+						
+		},
+		{
+			"groupby":"Data Views",
+			
+			"measure":"cal3"
+						
+		},
+		{
+			"groupby":"Collections",
+		
+			"measure":"cal4"
+		
+		}
+		,
+		{
+			"groupby":"Setups",
+			
+			"measure":"cal5"
+						
+		}
+	]
+
+}

@@ -1,0 +1,29 @@
+{"total":"3",
+   "data":
+	[
+			  {
+				"dataview_name":"Excel Sheet",
+				"source":"Spreadsheet",
+				"dataview_desc":"Transation",
+				"no_of_records":"12,115",
+				"update_date":"12/10/2014"
+			
+			  },
+			  {
+				"collection_name":"insight-CM-AGS",
+				"source":"insight-CM-AGS",
+				"description":"Global postion for Ags",
+				"no_of_records":"12,5222",
+				"update_date":"12/10/2013"
+				
+			  },
+			  {
+				"collection_name":"insight-CM-Metal",
+				"source":"insight-CM-Metal",
+				"description":"Global postion for Metal",
+				"no_of_records":"12,115858",
+				"update_date":"12/10/2013"
+				
+			  }
+	]
+}
