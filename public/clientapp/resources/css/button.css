@@ -1,0 +1,56 @@
+.button{
+	padding: 5px 15px;
+	margin: 2px 2px ;	
+	border-radius: 3px;	
+	border-radius: 3px;
+	font:normal 12px tahoma,arial,verdana,sans-serif;
+}
+.button-primary {
+	border: 1px solid #30B55F;
+	background: #30B55F;
+	color: #fff;
+	
+}
+.button-primary:hover {
+	border: 1px solid #30B55F;
+	background: #30B55F;
+	color: #A5D7B5;
+	
+}
+.button-secondary {
+	border: 1px solid #E6E7E7;
+	background: #E6E7E7;
+	color: #050607;
+}
+.button-secondary:hover {
+	border: 1px solid #EBECED;
+	background: #EBECED;
+	color: #A09F9F;
+}
+.button-others {
+	border: 1px solid #107EC0;
+	background: #107EC0;
+	color: #FFF;	
+}
+.button-others:hover {
+	border: 1px solid #2D97CE;
+	background: #2D97CE;
+	color: #91BFE0;
+	
+}
+.button-danger {
+	border: 1px solid #DA5427;
+	background: #DA5427;
+	color: #fff;
+	
+}
+.button-danger:hover {
+	border: 1px solid ##E3764A;
+	background: #E3764A;
+	color: #F3C0B1;
+	
+}/*listing customization*/
+/*button others*/
+
+/*Ends Here*/
+
