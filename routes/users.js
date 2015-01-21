@@ -18,7 +18,7 @@ router.post('/saveCollection', function(req, res,next) {
 	console.log("col Desc:"+req.param("collDesc"));
 	var collection_name = req.param("collName");
 	var collection_desc = req.param("collDesc");
-  	console.log("file name123:"+req.files.myFile.name); 
+  	
   	try{
 	var fileStream=fs.createReadStream(req.files.myFile.path);
 	//new converter instance
