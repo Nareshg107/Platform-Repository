@@ -12,7 +12,7 @@ var db = monk('localhost:27017/nodetest');
 var db1= mongojs('localhost:27017/nodetest',['tempDataViewList','temp_results']);
 
 /* GET users listing. */
-router.post('/saveCollection', function(req, res,next) {
+router.post('/saveCollection', function(req, res,next){
 	
 	console.log("col name:"+req.param("collName"));
 	console.log("col Desc:"+req.param("collDesc"));
@@ -32,7 +32,7 @@ csvConverter.on("end_parsed",function(jsonObj){
 	console.log('noOfRecs'+noOfRecs);
 	
 	if(noOfRecs==0)
-		throw new Error('Application Error: File has no data to upload');
+		throw new Error('Application Error: File has no data to upload:');
 
 	//Identify dimensions and measures
 	var xyAxis = getDimensionsandMeasures(jsonObj);
@@ -1207,7 +1207,7 @@ router.get('/getDashboardByName', function(req, res) {
 
 
 router.post('/deleteDashboard', function(req, res) {
-	console.log('inside delete  dashboard ');
+	console.log('inside delete  dashboard: ');
 	var dashboard_id = req.param("dashboard_id");
   	db.get("DashboardList").remove({_id: dashboard_id}, function(err){
   		if(err) return next(err);
