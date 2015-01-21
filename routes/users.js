@@ -1207,7 +1207,7 @@ router.get('/getDashboardByName', function(req, res) {
 
 
 router.post('/deleteDashboard', function(req, res) {
-	console.log('inside delete  dashboard:-- ');
+	console.log('inside delete  dashboard1:-- ');
 	var dashboard_id = req.param("dashboard_id");
   	db.get("DashboardList").remove({_id: dashboard_id}, function(err){
   		if(err) return next(err);
