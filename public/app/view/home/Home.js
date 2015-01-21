@@ -6,19 +6,6 @@ Ext.Ajax.on("beforerequest", function(){
 	}					        
 });
 
-
-Ext.Ajax.on("requestcomplete", function(conn, result, options){
-	console.info("requestcomplete"+result);
-	response = result.responseText;
-	res = eval('(' + response + ')');	
-	if(res != undefined || res!='' && (res.msg != undefined || res.msg != '')) {
-		if(res.msg == "Invalid Session") {
-			 sessionStorage.removeItem('sessionID');					                      	
-			 window.location="/index.html";
-		}		
-	}      
-});
-
 Ext.define('SmartApp.view.home.Home',{
 extend : 'Ext.container.Viewport',
 requires: ['SmartApp.view.home.Header'],
@@ -38,7 +25,10 @@ items : [{
 		id : 'contentSection',
 		cls:'app-dashboard',
 		items : [{
-					xtype : 'tabpanelXtype'
+			 	
+				xtype : 'tabpanelXtype',
+				height:50,
+			 	cls:'platform-navigation'
 				}, {
 					xtype:'panel',
 					id:'contentRegionPanel',

@@ -1,53 +1,44 @@
 Ext.define('SmartApp.view.home.PageTabPanel', {
-   extend : 'Ext.TabPanel',
+   extend: 'Ext.toolbar.Toolbar',
 	xtype : 'tabpanelXtype',
-    cls: 'tab-smart',
+   // cls: 'tab-smart',
 	id:'tabpanelXtype',
     controller: 'main',
     width: '100%',
     height:30,
 
     defaults: {
-        bodyPadding: 10,
-        autoScroll: true
+        frame: false
     },
-
-    listeners: {
-        tabchange: 'onTabChange',
-        scope: 'controller'
-    },
-	margin:'3 0 0 5',
-    items: [ {
-        title: 'App',
-         layout: 'column'
-        
-    },{
-        title: 'Insights',
-         layout: 'column'
-        
-    }, {
-        title: 'Data Views'
-       /* loader: {
-            url: 'resources/data/tab/ajax2.htm',
-            contentType: 'html',
-            loadMask: true
-        }*/
-    },
-	 {
-        title: 'Collections'
-       /* loader: {
-            url: 'resources/data/tab/ajax2.htm',
-            contentType: 'html',
-            loadMask: true
-        }*/
-   
-    },
-	{
-        title: 'Setups',
-        loader: {
-            url: 'resources/data/tab/ajax2.htm',
-            contentType: 'html',
-            loadMask: true
-        }
-    }]
+   items:[{
+                    xtype: 'button',
+                    text:'APPS',
+                    iconCls: 'apps',
+                    id:'AppsId',
+                    handler:'showCategoryApps'
+                }, {
+                    xtype: 'button',
+                    text:'INSIGHTS',                    
+                    id:'InsightsId',
+                    iconCls: 'insights',
+                  handler:'showCategoryInsights'
+                }, {
+                    xtype: 'button',
+                    text:'DATAVIEW',
+                    id:'DataViewId',
+                    iconCls: 'dataviews',
+                    handler:'showCategoryDataView'
+                }, {
+                    xtype: 'button',
+                    text:'COLLECTIONS',
+                    id:'CollectionsId',
+                   iconCls: 'collections',
+                   handler:'showCategoryCollections'
+                }, {
+                    xtype: 'button',
+                    text:'SETUP',
+                    id:'SetupId',
+                   iconCls: 'algorithms',
+                   handler:'showSetup'
+                }]
 });

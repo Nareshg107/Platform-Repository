@@ -8,7 +8,7 @@
  */
 Ext.define('SmartApp.view.main.MainController', {
 	extend : 'Ext.app.ViewController',
-	requires : [ 'Ext.MessageBox'//,'SmartApp.view.realtimepandl.FileUploadView'
+	requires : [// 'Ext.MessageBox'//,'SmartApp.view.realtimepandl.FileUploadView'
 	],
 	alias : 'controller.main',
 	 routes : {
@@ -114,7 +114,43 @@ Ext.define('SmartApp.view.main.MainController', {
 
 	},*/
 	//for tab change
-	onTabChange: function(tabPanel, newItem, oldItem) {
+
+showCategoryApps: function() {
+	
+		var contentRegion=Ext.create('SmartApp.view.app.AppGridWithButton');		
+							var vport=Ext.getCmp('contentRegionPanel');
+							vport.removeAll(true, true);
+							vport.add(contentRegion);
+	},
+	showCategoryInsights: function() {
+		var contentRegion=Ext.create('SmartApp.view.dashboard.DashboardWithButton');		
+							var vport=Ext.getCmp('contentRegionPanel');
+							vport.removeAll(true, true);
+							vport.add(contentRegion);
+	},
+	showCategoryDataView: function() {
+		var contentRegion=Ext.create('SmartApp.view.dataviews.DataViewwithButton');		
+							var vport=Ext.getCmp('contentRegionPanel');
+							vport.removeAll(true, true);
+							vport.add(contentRegion);
+	},
+	
+	showCategoryCollections: function() {
+		var contentRegion=Ext.create('SmartApp.view.collections.CollectionwithButton');		
+							var vport=Ext.getCmp('contentRegionPanel');
+							vport.removeAll(true, true);
+							vport.add(contentRegion);	
+	},
+	showSetup: function() {
+		var contentRegion=Ext.create('SmartApp.view.setup.UserSetupGridWithButton');		
+							var vport=Ext.getCmp('contentRegionPanel');
+							vport.removeAll(true, true);
+							vport.add(contentRegion);
+	}
+
+
+//for tab change
+/*	onTabChange: function(tabPanel, newItem, oldItem) {
         if(newItem.title=='Collections')
 		{
 		var contentRegion=Ext.create('SmartApp.view.collections.CollectionwithButton');		
@@ -168,6 +204,6 @@ Ext.define('SmartApp.view.main.MainController', {
 		
 		
 		
-    }
+    }*/
 	
 });

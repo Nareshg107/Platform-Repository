@@ -390,6 +390,108 @@ working copy commented for Sidath new design
 	font: normal 14px/150% 'Proxima Nova Bold';
 	color:#333333;
 }
+/*for app selection */
+.x-app-selection-view .thumb-wrap {
+float: left;
+margin-right: 0;
+padding: 5px 12px;
+}
+.x-app-selection-view .thumb {
+/* padding: 3px; */
+padding: 0px;
+cursor: pointer;
+/*width: 100%;*/
+border: 1px solid #CBCBCB;
+background-color: #FFF;
+}
+.x-app-selection-view .thumb-wrap .view-app-selection {
+	display: block;
+	overflow: hidden;
+	text-align: left;
+	/*width: 160px; */
+	/*padding: 4px 0 0 8px;*/
+	padding: 0px 0 0 0px;
+	color:#FFF;
+	font: normal 16px 'Proxima Nova Regular';
+	color: #919495;
+	min-height:50px;
+	background:#FFF;
+}
+.x-app-selection-view .thumb-wrap .view-app-selection span {
+	display: block;
+	padding: 5px 10px 0 10px;
+}
+.x-app-selection-view .thumb-wrap.x-item-selected {
+	background:none;
+}
+.x-app-selection-view .thumb-wrap.x-item-selected .thumb-icon{
+	background-image: url(../../resources/images/round-checked.png);
+}
+.x-app-selection-view .x-view-item-focused {
+outline: none !important;
+}
+/* for apps home view */
+
+.x-apps-home-view .thumb-wrap {
+float: left;
+margin-right: 0;
+padding: 12px 12px;
+}
+.x-apps-home-view .thumb {
+/* padding: 3px; */
+padding: 0px;
+cursor: pointer;
+width: 100%;
+border: 1px solid #CBCBCB;
+background-color: #FFF;
+}
+.x-apps-home-view .thumb-wrap .thumb-title-home-page {
+	display: block;
+	overflow: hidden;
+	text-align: left;
+	/*width: 160px; */
+	/*padding: 4px 0 0 8px;*/
+	padding: 5px;
+	color:#FFF;
+	font: normal 14px/150% 'Proxima Nova Light';
+	color: #414346;
+	
+	/*background:#036;*/
+}
+.thumb-icon-bar{
+	padding: 5px 0 0 5px;
+	display: block;
+	min-height:28px;
+}
+
+.x-apps-home-view .thumb-wrap .thumb-title-home-page span {
+display: block;
+padding: 5px 10px 0 10px;
+}
+.x-apps-home-view .thumb-wrap .thumb-description {
+width: 100% !important;
+float: left;
+margin: 0px 0 0 2px;
+padding: 5px 10px 0 10px;
+font: normal 14px/150% 'Proxima Nova Regular';
+color: #333333;
+}
+.x-apps-home-view .thumb-wrap .thumb-description-name {
+width: 70% !important;
+float: left;
+/* margin: 10px 0 0 0; */
+font: normal 14px/150% 'Proxima Nova Regular';
+color: #333333;
+}
+.x-apps-home-view .thumb-wrap .thumb-description-value {
+width: 30% !important;
+float: left;
+text-align: right !important;
+padding-right: 2px;
+/* margin: 10px 0 0 0; */
+font: normal 14px/150% 'Proxima Nova Bold';
+color: #333333;
+}
 /*
 working copy commented for Sidath new design ends */
 
@@ -448,40 +550,36 @@ working copy commented for Sidath new design ends */
 .tile-violet {
 	background-color:#BA68C8;
 }
-.tile-light-blue{
-	/*background-image:url(../../resources/images/light-blue.png);
-	background-position:top;
-	background-repeat:repeat-x;*/
+.tile-light-blue{	
 	background-color:#D9EDF9;
-	width:180px;
+	width:178px;
+}
+.tile-light-blue-summary{	
+	background-color:#D9EDF9;
 }
 .tile-soft-blue{
 	/*background-image:url(../../resources/images/soft-blue.png);
 	background-position:top;
 	background-repeat:repeat-x;*/
 	background-color:#ACDBF8;
-	width:180px;
 }
 .tile-grayish-orange{
 	/*background-image:url(../../resources/images/grayish-orange.png);
 	background-position:top;
 	background-repeat:repeat-x;*/
 	background-color:#F7E2DA;
-	width:180px;
 }
 .tile-grayish-green{
 	/*background-image:url(../../resources/images/grayish-green.png);
 	background-position:top;
 	background-repeat:repeat-x;*/
 	background-color:#E4F2DA;
-	width:180px;
 }
 .tile-soft-green{
 	/*background-image:url(../../resources/images/soft-green.png);
 	background-position:top;
 	background-repeat:repeat-x;*/
 	background-color:#C7E6AC;
-	width:180px;
 }
 
 .button-simulate.x-btn-default-small {
@@ -843,7 +941,7 @@ background-image:url(../../resources/images/button-add-medium.png) !important;
 
 .notification .x-panel-body-default {
 font: normal 14px 'Proxima Nova Light';
-padding: 20px 33px;
+padding: 20px 0 0 33px;
 font-size: 14px;
 color: #292B2C;
 background-image: url(../../resources/images/icon-clock.png) !important;
@@ -1264,7 +1362,7 @@ background-color: #FFF;
 color: #292B2C;
 font: normal 16px 'Proxima Nova Semibold';
 }
-.create-portfolio-table{border:1px solid #F0F0F0;padding:10px 10px 10px 10px;margin-bottom:5px;}
+.create-portfolio-table{border:1px solid #F0F0F0;padding:5px 10px 5px 10px;margin-bottom:5px;}
 
 .content-apps-grid .x-grid-item {
 color: #2C3133;
@@ -1412,6 +1510,9 @@ background:#FFF;
 }
 .button-setup-navigation .x-panel .x-panel-body-default {
 background:#F7F8F8;
+}
+.button-setup-navigation .x-form-item-label-default{
+	padding-top:10px
 }
 .content-header .x-panel-header-default .x-panel-header-title-default {
 	color: #656666;
@@ -1834,11 +1935,243 @@ background-position: -17px -17px;
 .simulation-result-content .x-form-cb-checked .x-form-checkbox-default {
 background-position: 0 -17px;
 }
-
-.itemselector .x-panel-header-default {
-font-size: 13px;
-border: 1px solid #d9d9d9 !important;
+.eka-main-content-area > .x-panel-body-default-framed{
+	 border:none;
 }
-.itemselector .x-panel-body-default {
-border: 1px solid #d9d9d9 !important;
+
+.platform-navigation.x-toolbar-default {
+	background-color: #22323C;
+	padding:0px !important;
+	
+}
+/*.platform-navigation.x-box-inner{
+	width:100%;
+}*/
+.platform-navigation .x-btn-default-toolbar-small {
+border-radius: 0;
+padding:0 !important;
+border-top:1px solid #47545C;
+border-left:1px solid #47545C;
+border-right:1px solid #47545C;
+border-bottom:0px;
+background-image: none;
+background-color: #22323C;
+}
+.platform-navigation .x-btn-default-toolbar-small.x-btn-over {
+background-color: #314049;
+}
+.platform-navigation .x-btn-default-toolbar-small.x-btn-focus.x-btn-pressed {  
+  box-shadow:none;
+}
+ .x-btn-default-toolbar-small.x-btn.x-btn-pressed {
+  border-color:#47545C;
+  background-image: none;
+}
+.platform-navigation .x-btn-default-toolbar-small.x-btn-focus {
+  background-image: none !important;
+  background-color: #314049 !important;
+  box-shadow:none !important;
+}
+
+.platform-navigation .x-btn-button-default-toolbar-small {
+height: 48px;
+}
+.platform-navigation .x-box-item {
+ position:static !important; 
+display: block;
+float: left;
+width:20% !important
+}
+.x-btn-inner-default-toolbar-small {
+font: normal 16px 'Proxima Nova Light';
+color: #D0E2EC;
+padding: 0 5px 0 20px;
+}
+.platform-navigation .x-btn-icon-el-default-toolbar-small {
+height: 24px;
+width: 24px;
+}
+.platform-navigation .apps{background-image: url(../../resources/images/platform/nav-apps.png);}
+.platform-navigation .insights{background-image: url(../../resources/images/platform/nav-insights.png);}
+.platform-navigation .dataviews{background-image: url(../../resources/images/platform/nav-dataview.png);}
+.platform-navigation .algorithms{background-image: url(../../resources/images/platform/nav-algorithm.png);}
+.platform-navigation .collections{background-image: url(../../resources/images/platform/nav-collections.png);}
+
+.ddl-rounded .x-form-trigger-wrap-default {
+border:none;
+}
+.ddl-rounded .x-form-text-default {
+	color: black;
+	padding: 8px 8px 8px 8px;
+	/* background-color: white; */
+	font: normal 13px/15px helvetica, arial, verdana, sans-serif;
+	min-height: 29px;
+	border-left:1px solid #EDEDED;
+	border-top:1px solid #EDEDED;
+	border-bottom:1px solid #EDEDED;
+	border-top-right-radius: 0;
+	border-bottom-right-radius:0;
+	border-top-left-radius:18px;
+	border-bottom-left-radius:18px;
+}
+.ddl-rounded .x-form-trigger-default {
+	border-top:1px solid #EDEDED;
+	border-bottom:1px solid #EDEDED;
+	background-position:0 center;
+	width:16px;
+}
+
+.ddl-rounded-right-border.x-btn-default-small {
+	width: 18px;
+	height: 33.5px;
+	border-top-right-radius: 18px;
+	border-bottom-right-radius: 18px;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	border-top:1px solid #EDEDED;
+	border-right:1px solid #EDEDED;
+	border-bottom:1px solid #EDEDED;
+	border-left:none;
+	line-height:100px;
+	text-align:center;
+	background:#FFFFFF;
+}
+.ddl-rounded-right-border .x-btn-inner-default-small {
+	font: normal 13px 'Proxima Nova Semibold';
+	color: white;
+}
+.ddl-rounded-right-border.x-btn-default-small.x-btn-over {
+	background-color: #FFFFFF;
+}
+.ddl-rounded-right-border.x-btn.x-btn-menu-active.x-btn-default-small, .ddl-rounded-right-border.x-btn.x-btn-pressed.x-btn-default-small {
+	background-color: #FFFFFF;
+	background-image:none; 
+	border-color: #EDEDED;
+	box-shadow:none;
+}
+.ddl-rounded-right-border.x-btn-focus.x-btn-default-small {
+	background-color: #FFFFFF;
+	background-image:none; 
+	border-color: #EDEDED;
+	box-shadow:none;
+}
+.btnexport {
+	padding: 3px 0px 3px 7px;
+	border: none;
+	background-color: #FFF;
+	background-image: url(../../resources/images/export.png) !important;
+	background-position: right !important;
+	background-repeat: no-repeat;
+}
+.btnexport .x-btn-inner-default-toolbar-small {
+	font: normal 16px 'Proxima Nova Light';
+	color: #D3D3D3;
+	padding: 0 5px 0 5px;
+}
+.btnexport.x-btn-over.x-btn-default-toolbar-small {
+  border:none;
+  background-image: none;
+  background-color: #D8E4EA !important;
+}
+.ddl-view-by .x-form-item-label-default {
+
+padding-top: 12px;
+padding-right: 30px;
+}
+.grid-column-bg-red .x-grid-cell-inner {
+    background-color: #FFB0C4;
+    color:red;
+}
+.grid-column-bg-green .x-grid-cell-inner{
+    background-color: #B0FFC5;
+    color:green;
+}
+
+.x-form-text-field-body-default {
+  min-width: 100px;
+}
+.button-overflow-icon.x-btn-default-small {
+border-radius: 0;
+padding: 3px 3px 3px 3px;
+border-left: 1px solid #D8E4EA !important  ;
+border-right: 1px solid #D8E4EA !important  ;
+width:65px;
+height:50px;
+background-position:center;
+background-color: #FFF;
+background-repeat:no-repeat;
+background-image: url(../../resources/images/menu-overflow.png);
+}
+.button-overflow-icon.x-btn-default-small.x-btn-over {
+background-color: #E6F2F9;
+}
+.button-overflow-icon.x-btn.x-btn-menu-active.x-btn-default-small, .button-overflow-icon.x-btn.x-btn-pressed.x-btn-default-small {
+background-position:center;
+background-repeat:no-repeat;
+background-image: url(../../resources/images/menu-overflow.png) ;
+background-color: #E6F2F9;
+}
+.cls-change-scenario{background-image: url(../../resources/images/icon-change-scenario.png) ;}
+.cls-view-curve{background-image: url(../../resources/images/icon-view-curve.png) ;}
+.cls-view-pdf{background-image: url(../../resources/images/button-pdf-small.png) ;}
+.cls-view-home{background-image: url(../../resources/images/button-home-small.png) ;}
+.cls-refresh-small{background-image: url(../../resources/images/button-refresh-small.png) ;}
+.x-menu-icon-separator-default {
+left: 26px;
+border-left:none !important;
+background-color: none;
+width: 1px;
+}
+.ddl-scenario-responsive{border-left: 1px solid #D8E4EA !important  ;
+border-right: 1px solid #D8E4EA !important  ;}
+.login-bg{
+	background-color:#F00;
+	background: url(../../resources/images/eka_login-bg.png) no-repeat center center fixed;
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.login-bg .x-panel-body-default {
+	background:transparent;
+}
+.eka-login-window.x-window-default {
+border:none !important;
+border-radius:none;
+}
+.eka-login-window.x-window-default {
+border-radius: 0;
+padding: 0px 0px 0px 0px;
+border:none;
+background-color: transparent;
+}
+.eka-login-window .x-window-body-default {
+border-color: #3892d3;
+border-width: 1px;
+border-style: solid;
+background: transparent !important;
+font-family: 'Proxima Nova Regular';
+}
+.eka-login-logo { 
+border-top-left-radius:5px;
+border-bottom-left-radius:5px;
+}
+.eka-login-logo .x-panel-body-default{
+background-color:#007DBF;
+}
+.eka-login-logo .x-panel-body-default{
+background-image:url(../../resources/images/eka-login-logo.png) !important;
+background-position:center center;
+background-repeat:no-repeat;
+}
+.eka-login-form{ 
+	background:#FFF;
+	border-top-right-radius:5px;
+	border-bottom-right-radius:5px;
+}
+.eka-login-window-copyright .x-panel-body-default {
+font: normal 14px 'Proxima Nova Regular';
+color: #FFF;
+text-align:center;
+margin-top:50px;
 }
