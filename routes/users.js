@@ -1199,7 +1199,7 @@ router.get('/getDashboardData', function(req, res,next) {
 
 router.get('/getDashboardByName', function(req, res) {
 	var dashboard_name = req.param("name");
-	console.log('dashboard_name:'+dashboard_name);
+	console.log('dashboard_name:--'+dashboard_name);
 	db.get("DashboardList").find({name: dashboard_name}, function(err, doc){
 		res.json(doc); 			
 	});
@@ -1207,7 +1207,7 @@ router.get('/getDashboardByName', function(req, res) {
 
 
 router.post('/deleteDashboard', function(req, res) {
-	console.log('inside delete  dashboard ');
+	console.log('inside delete  dashboard:-- ');
 	var dashboard_id = req.param("dashboard_id");
   	db.get("DashboardList").remove({_id: dashboard_id}, function(err){
   		if(err) return next(err);
