@@ -3,13 +3,13 @@ var router = express.Router();
 var Converter=require("csvtojson").core.Converter;
 var fs=require("fs");
 var monk = require('monk');
-var db = monk('localhost:27017/nodetest');
+var db = monk('localhost:27017/smartdb');
  var dateFormat = require('dateformat');
  var type = require('type-of-is');
  var mapreduce = require('mapred')();
  var random = require("node-random");
  var mongojs = require('mongojs');
-var db1= mongojs('localhost:27017/nodetest',['tempDataViewList','temp_results']);
+var db1= mongojs('localhost:27017/smartdb',['tempDataViewList','temp_results']);
 
 /* GET users listing. */
 router.post('/saveCollection', function(req, res,next) {
