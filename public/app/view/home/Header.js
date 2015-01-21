@@ -41,18 +41,18 @@ Ext.define('SmartApp.view.home.Header', {
                                         sessionStorage.removeItem('sessionID');
                                         Ext.Ajax.request(
                                         {
-                                        //url : 'http://192.168.1.154:3000/users/deleteCollection?dataviewId='+dataviewId+'&collectionId='+collectionId, 
-                                        url: 'http://192.168.1.154:3000/users/logout',
+                                        //url : 'http://localhost:3000/users/deleteCollection?dataviewId='+dataviewId+'&collectionId='+collectionId, 
+                                        url: 'http://localhost:3000/users/logout',
                                         method: 'GET',
                                         
                                         success: function ( result, request) { 
                                         console.log('on success:::');
-                                        window.location.href='http://192.168.1.154:3000','width=1000 height=1000, scrollbars=yes, resizable=yes'                                               
+                                        window.location.href='/index.html','width=1000 height=1000, scrollbars=yes, resizable=yes'                                               
                                         
                                         },
                                         failure: function ( result, request) { 
                                         console.log('on failure:::');
-                                        Ext.MessageBox.alert('Failed', 'Request failed'); 
+                                        Ext.Msg.alert('Failed', 'Request failed'); 
                                         } 
                                     });
                                     }
