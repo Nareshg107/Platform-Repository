@@ -1,9 +1,11 @@
 Ext.define('SmartApp.view.app.AppGridWithButton', {
-	extend: 'Ext.Panel',
+	extend: 'Ext.form.Panel',
 	requires:[
 	'SmartApp.view.app.ContentApp'],
 	alias: 'widget.appGridWithButton',	
 	id: 'appGridWithButton',
+	xtype:'appGridWithButton',
+	controller:'main',
 	autoDestroy: false,
 	margin:'12 0 0 0',
 	items:[
@@ -49,32 +51,46 @@ Ext.define('SmartApp.view.app.AppGridWithButton', {
 			cls:'ddl-rounded-right-border'
         },{
 
-                xtype: 'combobox',
+                xtype: 'textfield',
                 cls: 'ddl-search-app',
                 width: 280,
                 emptyText: 'Search Apps',
-                //style: 'margin-right:20px',
-                store: {
-                    fields: ['SearchApp', 'SearchAppVal'],
-                    data: [
-						['Crude Oil Insights', 'Crude Oil Insights'],
-						['Global Oil Risk Position', 'Global Oil Risk Position'],
-						['North American Strategy', 'North American Strategy'],
-						['My Trade Insights', 'My Trade Insights'],
-						['Derivatives And Financial View', 'Derivatives And Financial View'],
-						['Risk Insights', 'Risk Insights']
-                    ]
-                },
-                displayField: 'SearchApp',
-                valueField: 'SearchAppVal',
-                filterPickList: true,
-                queryMode: 'local',
-                publishes: 'value'
-
+                name : 'appname',
+                id:'appnameId',
+                 labelWidth: null,
+                        listeners: {
+                          // scope : this,
+                         buffer: 200,
+                      change:'appname'
+                        }
+                  
+              
             }, {
             xtype: 'button',
             text: 'GO',
-			cls:'app-gobutton'
+			cls:'app-gobutton',
+			handler: function() {
+			var appname=Ext.getCmp('appnameId').getRawValue();	
+		//alert(appname);
+				var view=Ext.getCmp("InsightsCarouselContent");
+
+            store = view.getStore(),
+            selModel = view.getSelectionModel(),
+            selection = selModel.getSelection()[0];
+        //alert(newValue);
+
+        store.getFilters().replaceAll({
+            property: 'name',
+            anyMatch: true,
+            value   : appname
+        });
+        if (selection && store.indexOf(selection) === -1) {
+            selModel.clearSelections();
+            this.down('AppCarouselView').clear();
+        }
+
+						
+			}
         },  {
             xtype: 'button',
 			cls:'button-label-or',
