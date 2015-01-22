@@ -5,7 +5,20 @@ Ext.Ajax.on("beforerequest", function(){
 		console.info("beforerequest");
 	}					        
 });
-
+Ext.Ajax.on("requestcomplete", function(conn, result, options){
+	console.info("requestcomplete"+result);
+	//alert('inside requestcomplete');
+	response = result.responseText;
+	res = eval('(' + response + ')');
+	//alert('resmsg:'+res.msg);
+	if(res != undefined || res!='' && (res.msg != undefined || res.msg != '')) {
+		if(res.msg == "Invalid Session") {
+			 sessionStorage.removeItem('sessionID');
+			 alert('Invalid Session. Please login again');					                      	
+			 window.location="/index.html";
+		}		
+	}      
+});
 Ext.define('SmartApp.view.home.Home',{
 extend : 'Ext.container.Viewport',
 requires: ['SmartApp.view.home.Header'],
