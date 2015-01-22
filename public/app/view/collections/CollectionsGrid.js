@@ -14,6 +14,7 @@ Ext.define('SmartApp.view.collections.CollectionsGrid', {
 	forceFit: true,
 	width:'100%',
 	itemId:'collectionsGrid',
+	cls: 'content-apps-grid',   	
 	emptyText: 'No Matching Records',
     loadMask: true,
   //  stateful: true,
@@ -33,7 +34,7 @@ Ext.define('SmartApp.view.collections.CollectionsGrid', {
 			proxy: {
 					type: 'ajax',
 					//url:'resources/data/grid/CollectionData.json',				
-				    url: 'http://192.168.1.154:3000/users/getCollectionList',
+				    url: 'http://localhost:3000/users/getCollectionList',
 					reader: {
 						type: 'json',
 						rootProperty:'data'						
@@ -105,7 +106,58 @@ Ext.define('SmartApp.view.collections.CollectionsGrid', {
 				 filter: {
 				 type: 'date'								
 			 }			
-			}],
+			},{
+        xtype:'actioncolumn',		
+        width:50,
+		align:'right',
+        items: [{
+			icon: 'resources/images/icon-grid-delete.png',  
+            tooltip: 'Delete',
+    		getClass: function() {
+       // return 'x-hide-display';  //Hide the action icon
+    		},
+            handler: function(grid, rowIndex, colIndex) {
+              var list = Ext.getCmp('listSubpages'); // getting id
+											var grid = list.down('#gridSubpagesList'); // using itemid of grid
+											var row = grid.getSelectionModel().getSelection()[0];								
+											if(row==null||row==undefined)
+											{
+												alert('Please Select a row first!');	
+											}else 
+											{
+											grid.getStore().remove(grid.getSelectionModel().getSelection()[0]);							
+											grid.getStore().sync(); 								
+											var gridIdd=row.get('_id');
+										
+											console.log('the selected record path' +gridIdd);								
+											
+											if( sessionStorage.getItem("deletedCollId")!= null || sessionStorage.getItem("deletedCollId")!='') 
+												sessionStorage.removeItem("deletedCollId");
+												sessionStorage.setItem("deletedCollId",gridIdd);
+											Ext.Ajax.request(
+																{
+																url : 'http://localhost:3000/users/deleteCollection?coll_Id='+gridIdd, 
+																method: 'POST',
+																success: function ( result, request) { 
+																console.log('on success:::');												
+
+																},
+																failure: function(form, action) {
+				                        						Ext.Msg.alert('Failed', action.result.msg);
+				                    							}
+															});
+
+									var createDataConnectionView= new Ext.create('SmartApp.view.collections.CollectionwithButton');
+										var vport=Ext.getCmp('contentRegionPanel');
+										vport.removeAll(true, true);
+										vport.add(createDataConnectionView);	
+						
+								
+			               
+								}//else
+            }                
+        }]
+    }],
 				bbar: {
 					xtype: 'pagingtoolbar',
 					pageSize: 1,
