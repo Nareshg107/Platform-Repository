@@ -7,6 +7,97 @@ Ext.define('SmartApp.view.dashboard.DashboardWithButton', {
 	margin:'12 0 0 0',
 	items:[
 			{
+
+tools: [{
+
+                xtype: 'combobox',
+               cls: 'ddl-rounded',
+                width: 150,
+                emptyText: 'Sort by',
+               
+                store: {
+                    fields: ['SearchApp', 'SearchAppVal'],
+                    data: [
+						['Name', 'Name'],
+						['Date', 'Date']
+                    ]
+                },
+                displayField: 'SearchApp',
+                valueField: 'SearchAppVal',
+                filterPickList: true,
+                queryMode: 'local',
+                publishes: 'value'
+
+            },{
+            xtype: 'button',
+            text: '',
+			style: 'margin-right:20px',
+			cls:'ddl-rounded-right-border'
+        },{
+
+                xtype: 'textfield',
+                cls: 'ddl-search-app',
+                width: 280,
+                emptyText: 'Search Insight',
+                name : 'appname',
+                id:'appnameId',
+                 labelWidth: null,
+                        listeners: {
+                          // scope : this,
+                         buffer: 200,
+                      change:'appname'
+                        }
+                  
+              
+            }, {
+            xtype: 'button',
+            text: 'GO',
+			cls:'app-gobutton',
+			handler: function() {
+			var appname=Ext.getCmp('appnameId').getRawValue();	
+		//alert(appname);
+				var view=Ext.ComponentQuery.query("#listOfDashboardGrid")[0];
+
+            store = view.getStore(),
+            selModel = view.getSelectionModel(),
+            selection = selModel.getSelection()[0];
+        //alert(newValue);
+
+        store.getFilters().replaceAll({
+            property: 'name',
+            anyMatch: true,
+            value   : appname
+        });
+        if (selection && store.indexOf(selection) === -1) {
+            selModel.clearSelections();
+            this.down('listOfDashboardGrid').clear();
+        }
+
+						
+			}
+        },  {
+            xtype: 'button',
+			cls:'button-label-or',
+            text: 'OR',
+        }, {
+            xtype: 'button',
+            text: 'CREATE',
+			cls: 'button-round-corner-primary',
+			handler: function() {
+						sessionStorage.setItem('activityType','create');
+						sessionStorage.removeItem('dashboardConfig');
+						sessionStorage.removeItem('dashboard_id');
+
+						var createDashboardPage= new Ext.create('SmartApp.view.dashboard.CreateDashboardPage');		
+						var vport=Ext.getCmp('contentRegionPanel');
+						vport.removeAll(true, true);
+						vport.add(createDashboardPage);	
+			}
+        }]},
+
+
+
+			/*{
 			xtype:'button',
 			itemId:'CreateitemId',
 			cls:'button-primary',
@@ -42,7 +133,7 @@ Ext.define('SmartApp.view.dashboard.DashboardWithButton', {
 							sessionStorage.setItem('dashboard_id',row.get("_id"));
 							
 							Ext.Ajax.request({								
-								url : 'http://192.168.1.154:3000/users/getDashboardData?dashboard_id='+row.get("_id"), 
+								url : 'http://localhost:3000/users/getDashboardData?dashboard_id='+row.get("_id"), 
 								method: 'GET',
 								success: function ( result, request) { 									
 									console.log(result);												
@@ -74,7 +165,7 @@ Ext.define('SmartApp.view.dashboard.DashboardWithButton', {
 								},
 								failure: function ( result, request) { 
 								console.log('on failure:::');
-									Ext.MessageBox.alert('Failed', 'Request failed'); 
+									Ext.Msg.alert('Failed', 'Request failed'); 
 								} 
 							});	
 							
@@ -100,7 +191,7 @@ Ext.define('SmartApp.view.dashboard.DashboardWithButton', {
 					
 						Ext.Ajax.request(
 							{
-							url : 'http://192.168.1.154:3000/users/deleteDashboard?dashboard_id='+dashboard_id, 
+							url : 'http://localhost:3000/users/deleteDashboard?dashboard_id='+dashboard_id, 
 							method: 'POST',
 							success: function ( result, request) { 
 								console.log('on success:::');												
@@ -111,7 +202,7 @@ Ext.define('SmartApp.view.dashboard.DashboardWithButton', {
 							},
 							failure: function ( result, request) { 
 								console.log('on failure:::');
-								Ext.MessageBox.alert('Failed', 'Request failed'); 
+								Ext.Msg.alert('Failed', 'Request failed'); 
 							} 
 						});
 
@@ -120,7 +211,7 @@ Ext.define('SmartApp.view.dashboard.DashboardWithButton', {
 					}
 				}
 			
-			},
+			},*/
 			{
 				itemId:'listOfDashboardGrid',
 				cls:'content-apps-grid',	
