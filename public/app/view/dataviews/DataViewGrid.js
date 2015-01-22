@@ -41,7 +41,7 @@ Ext.define('SmartApp.view.dataviews.DataViewGrid', {
 		
 		columns: [
 			{
-				dataIndex:'dataview_id',minWidth:200,
+				dataIndex:'_id',minWidth:200,
 				text: 'Id',
 				hidden: true,
 				hideable: false
