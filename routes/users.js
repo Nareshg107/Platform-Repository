@@ -144,7 +144,7 @@ router.get('/getCollectionList', function(req, res,next) {
 	
 	var user_id = req.session.userID;
 	console.log("json collection list1:"+user_id+":"+req.session.username); 
-	  db1.collection('CollectionList').find({"user_id":user_id},{"data":false,"xyAxis":false,"dataViews":false},function(e,docs){
+	  db1.collection('CollectionList').find({"user_id":user_id},{"xyAxis":false},function(e,docs){
 	  	 if(e)
 		  	 	return next(e);
 	  	console.log("json collection list arr:"+docs); 
@@ -265,22 +265,23 @@ router.get('/getChartForDB', function(req, res,next) {
 	if(dvID!=null && dvID!=undefined&&dvID!='null' )
 	{
 //get chart
-db1.collection('CollectionList').find({},{"dataViews":true,"_id":false},function(e,docs){
+//db1.collection('DataViewList').find({},{},function(e,docs){
+	db.get("DataViewList").findById(dvID, function(err, doc){ 
 	  	//console.log("json collection list arr:"+JSON.stringify(docs)); 
 	  	
-	  		getDVAttributes(docs,dvID,function(err,dvAttrJson){//get doc data as well
+	  	//	getDVAttributes(docs,dvID,function(err,dvAttrJson){//get doc data as well
 	  			if (err) return next(err);
               console.log('inside callback getDVAttributes');
-              var dimension = dvAttrJson['group_by'];
-			  var measure = dvAttrJson['measure'];
-			  var aggregation_type = dvAttrJson['aggregation_type'];
-			  var coll_id = dvAttrJson['collection_id'];
+              var dimension = doc['group_by'];
+			  var measure = doc['measure'];
+			  var aggregation_type = doc['aggregation_type'];
+			  var coll_id = doc['collection_id'];
 //in 
-	var filterby = dvAttrJson['filterby'];
+	var filterby = doc['filterby'];
 	console.log("filterby:"+filterby);
 	var filterbyArr =filterby;// JSON.parse(filterby);
      db1.collection("CollectionData").find({'collection_id':mongojs.ObjectId(collection_id)}, {'collection_id':false},function(err, docs){
-      var dataJsonArr = doc["data"]; 
+      
       if(filterbyArr.length>0)
       {
       getFilterExpression(filterbyArr,function(err,filterExpression){
@@ -315,7 +316,7 @@ db1.collection('CollectionList').find({},{"dataViews":true,"_id":false},function
 
 //out
 
-	  		});
+	  		
 	  	
    
   });
@@ -472,7 +473,7 @@ router.get('/getDataViews', function(req, res,next) {
 
 });
 
-router.get('/prepareModifyDataView', function(req, res) { // add filter
+/*router.get('/prepareModifyDataView', function(req, res) { // add filter
 	var collection_id = req.param("collId");
 	var dataview_id = req.param("dataview_id");
 db.get("CollectionList").findById(collection_id, function(err, doc){ 
@@ -490,7 +491,7 @@ var filterbyArr = doc["dataViews"][dataview_id]["filterby"];
 	});
 	
 
-});
+});*/
 
 function getfilteredData(dataArr,filterExpression,callback)
 {
@@ -845,12 +846,8 @@ console.log("p6:"+new Date());
 res.send({success:true});
 });
 
- function getDVList(docs,callback){
- 	/*if(err)
- 	{
- 		console.log('getDVListerror::');
- 		next(err);
- 	}*/
+ /*function getDVList(docs,callback){
+ 	
  	try {
  	var jsonArr=[];
  	var error;
@@ -928,7 +925,7 @@ res.send({success:true});
 	  {
 	  	callback(ex,null);
 	  }
-	  };
+	  };*/
 
 	  function getFilterJson(filterbyArr,callback)
 	  {
@@ -1135,7 +1132,7 @@ res.send({success:true});
 
 });
 
-function duplicateDVCheck(dvName,dvID,callback)
+/*function duplicateDVCheck(dvName,dvID,callback)
 {
 	console.log('duplicate check');
 	db1.collection('CollectionList').find({},{"dataViews":true,"data":true,"_id":false},function(e,docs){	
@@ -1162,7 +1159,7 @@ function duplicateDVCheck(dvName,dvID,callback)
 	  	
    
   });
-}
+}*/
 
 router.get('/dashboardList', function(req, res,next) {
 	 db.get('DashboardList').find({},{},function(err,docs){
@@ -1237,9 +1234,9 @@ router.get('/getDataViewFilter', function(req, res,next) {
 	var dataview_id = req.param("dataview_id");
 	var collection_id = req.param("collection_id");
 
- 	db.get("CollectionList").findById(collection_id, function(err, doc){ 
+ 	db.get("DataViewList").findById(dataview_id, function(err, doc){ 
  		if(err) return next(err);
-		var filterbyArr = doc["dataViews"][dataview_id]["filterby"];
+		var filterbyArr = doc["filterby"];
 		console.log(filterbyArr);
 		res.json(filterbyArr);  
 	});

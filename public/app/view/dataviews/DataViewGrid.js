@@ -133,7 +133,7 @@ Ext.define('SmartApp.view.dataviews.DataViewGrid', {
 								{
 								sessionStorage.removeItem("activity_type");
 								sessionStorage.setItem("activity_type","modify");
-								var dataviewId=row.get('dataview_id');								
+								var dataviewId=row.get('_id');								
 								var dataviewName=row.get('dataview_name');
 								var dataviewDesc=row.get('dataview_desc');
 								var collectionId=row.get('collection_id');
@@ -185,7 +185,7 @@ Ext.define('SmartApp.view.dataviews.DataViewGrid', {
 								
 								grid.getStore().remove(grid.getSelectionModel().getSelection()[0]);							
 								grid.getStore().sync(); 
-								var dataviewId=row.get('dataview_id');
+								var dataviewId=row.get('_id');
 								var collectionId=row.get('collection_id');
 															
 								Ext.Ajax.request(
