@@ -7,7 +7,7 @@ Ext.define('SmartApp.store.DashboardStore', {
     proxy: {
 	type: 'ajax',
 	method:'GET',			
-	url: 'http://192.168.1.154:3000/users/dashboardList',
+	url: 'http://localhost:3000/users/dashboardList',
 	reader: {
 		type: 'json'					
 		}

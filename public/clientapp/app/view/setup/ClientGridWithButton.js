@@ -90,7 +90,7 @@ Ext.define('ClientApp.view.setup.ClientGridWithButton', {
 								
 								Ext.Ajax.request(
 									{
-									url : 'http://192.168.1.154:3000/users/deleteClient?client_id='+client_id, 
+									url : 'http://localhost:3000/users/deleteClient?client_id='+client_id, 
 									method: 'POST',
 									success: function ( result, request) { 
 									console.log('on success:::');												

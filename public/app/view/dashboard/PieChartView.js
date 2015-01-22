@@ -19,7 +19,7 @@ Ext.define('SmartApp.view.dashboard.PieChartView', {
 			autoLoad: true,
 			proxy: {
 				type: 'ajax',         
-				url : 'http://192.168.1.154:3000/users/getChartForDB?dataview_id='+dataview_id, 
+				url : 'http://localhost:3000/users/getChartForDB?dataview_id='+dataview_id, 
 				method: 'GET',
 				reader: {
 					type: 'json'               

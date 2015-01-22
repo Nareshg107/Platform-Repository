@@ -25,7 +25,7 @@ Ext.define('ClientApp.view.setup.ClientGridView', {
 							proxy: {
 									type: 'ajax',
 									//url:'resources/data/grid/CollectionData.json',				
-									url: 'http://192.168.1.154:3000/users/getClientList',
+									url: 'http://localhost:3000/users/getClientList',
 									reader: {
 										type: 'json',
 										rootProperty:'data'						

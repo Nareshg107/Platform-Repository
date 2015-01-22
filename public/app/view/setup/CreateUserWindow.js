@@ -11,7 +11,7 @@ var dimstore = new Ext.data.ArrayStore({
                 model: "Country1",    
                 proxy : {
                     type : 'ajax',
-                    url :'http://192.168.1.154:3000/users/getClientList' ,
+                    url :'http://localhost:3000/users/getClientList' ,
                     reader : {
                         type : 'json'   
                     }
@@ -30,7 +30,7 @@ Ext.define('SmartApp.view.setup.CreateUserWindow', {
 				Ext.Ajax.request(
 								{
 								
-								url : 'http://192.168.1.154:3000/users/getUserData?user_id='+sessionStorage.getItem('_uid'), 
+								url : 'http://localhost:3000/users/getUserData?user_id='+sessionStorage.getItem('_uid'), 
 								method: 'GET',
 								success: function ( result, request) { 
 									
@@ -148,7 +148,7 @@ Ext.define('SmartApp.view.setup.CreateUserWindow', {
 				var userJson = JSON.stringify(form.getFieldValues());
 				//alert(userJson);
                 form.submit({
-					url: 'http://192.168.1.154:3000/users/saveUserDetails?user_data='+userJson,
+					url: 'http://localhost:3000/users/saveUserDetails?user_data='+userJson,
 					//jsonSubmit : true,
                     success: function(form, action) {
                       // Ext.Msg.alert('Success', action.result.msg);

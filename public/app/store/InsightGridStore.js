@@ -11,7 +11,7 @@ Ext.define('SmartApp.store.InsightGridStore', {
 	type: 'ajax',
 	method:'GET',
 	//url:'data/insightGrid.json',				
-	url: 'http://192.168.1.154:3000/users/getDataViewList',
+	url: 'http://localhost:3000/users/getDataViewList',
 	reader: {
 		type: 'json'					
 		}

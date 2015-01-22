@@ -109,7 +109,7 @@ Ext.define('SmartApp.view.collections.DyanamicGridWithBackButton', {
 										Ext.Ajax.request(
 											{
 											//url : 'http://localhost:3001/users/deleteCollection?dataviewId='+dataviewId+'&collectionId='+collectionId, 
-											url: 'http://192.168.1.154:3000/users/saveDataViews'+params,
+											url: 'http://localhost:3000/users/saveDataViews'+params,
 											method: 'POST',
 											success: function ( result, request) { 
 											console.log('on success1:::');												

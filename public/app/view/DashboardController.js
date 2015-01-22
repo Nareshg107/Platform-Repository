@@ -76,7 +76,7 @@ Ext.define('SmartApp.view.DashboardController', {
 		} else {
 			//alert("inside modify"+sessionStorage.getItem('dashboardConfig'));
 			Ext.Ajax.request({								
-				url : 'http://192.168.1.154:3000/users/saveDashboard?dashboard_id='+sessionStorage.getItem('dashboard_id')+'&activityType='+sessionStorage.getItem('activityType')+'&dashboardconfig='+sessionStorage.getItem('dashboardConfig'), 
+				url : 'http://localhost:3000/users/saveDashboard?dashboard_id='+sessionStorage.getItem('dashboard_id')+'&activityType='+sessionStorage.getItem('activityType')+'&dashboardconfig='+sessionStorage.getItem('dashboardConfig'), 
 				method: 'POST',
 				success: function ( result, request) { 									
 					console.log("Update successful"+result);	

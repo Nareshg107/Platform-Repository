@@ -26,7 +26,7 @@ Ext.define('SmartApp.view.app.TopInsightView', {
 
 
          Ext.Ajax.request({                              
-                url : 'http://192.168.1.154:3000/users/getDashboardByName?name='+insightname, 
+                url : 'http://localhost:3000/users/getDashboardByName?name='+insightname, 
                 method: 'GET',
                 success: function ( result, request) {                                  
                     console.log(result);                                                

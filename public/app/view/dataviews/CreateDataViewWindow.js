@@ -120,12 +120,12 @@ Ext.define('SmartApp.view.dataviews.CreateDataViewWindow', {
 					
 							Ext.Ajax.request(
 								{
-								url : 'http://192.168.1.154:3000/users/saveDataViews'+params, 
+								url : 'http://localhost:3000/users/saveDataViews'+params, 
 								method: 'POST',
 								success: function ( result, request) { 
 								console.log('on success:::');		
 
-									Ext.getCmp('tabpanelXtype').setActiveItem(3);								
+									//Ext.getCmp('tabpanelXtype').setActiveItem(3);								
 									var databuttonView= new Ext.create('SmartApp.view.dataviews.DataViewwithButton');		
 									var vport=Ext.getCmp('contentRegionPanel');
 									vport.removeAll(true, true);

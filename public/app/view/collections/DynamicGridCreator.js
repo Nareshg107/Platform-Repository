@@ -16,7 +16,7 @@ Ext.define('SmartApp.view.collections.DynamicGridCreator', {
 	 itemId:'dynamicGridCreator',
 	 
     // URL used for request to the server. Required
-  // url: 'http://192.168.1.154:8080/getMarketQuotes',
+  // url: 'http://localhost:8080/getMarketQuotes',
   					
   
   // url: 'http://localhost:3000/getDataViews?collId='+sessionStorage.getItem("selectedCollId")+'&activityType='+sessionStorage.getItem("activity_type")+'&dataview_id='+sessionStorage.getItem("dataviewId"),
@@ -36,9 +36,9 @@ Ext.define('SmartApp.view.collections.DynamicGridCreator', {
 
     		var url = '';
     	 	if(sessionStorage.getItem('activity_type')!=null && sessionStorage.getItem('activity_type')!='create') {
-    			 url='http://192.168.1.154:3000/users/getDataViews?collId='+sessionStorage.getItem("selectedCollId")+'&activityType='+sessionStorage.getItem("activity_type")+'&dataview_id='+sessionStorage.getItem("dataviewId");
+    			 url='http://localhost:3000/users/getDataViews?collId='+sessionStorage.getItem("selectedCollId")+'&activityType='+sessionStorage.getItem("activity_type")+'&dataview_id='+sessionStorage.getItem("dataviewId");
     		}else {
-    			 url='http://192.168.1.154:3000/users/getDataViews?collId='+sessionStorage.getItem("selectedCollId")+'&activityType='+sessionStorage.getItem("activity_type");
+    			 url='http://localhost:3000/users/getDataViews?collId='+sessionStorage.getItem("selectedCollId")+'&activityType='+sessionStorage.getItem("activity_type");
     		}
     		
 	
@@ -108,7 +108,7 @@ function getFiltervalues() {
     var colFilters = '';
     if(sessionStorage.getItem("activity_type")=='modify' || sessionStorage.getItem("activity_type")=='clone'){
         Ext.Ajax.request({
-            url: 'http://192.168.1.154:3000/users/getDataViewFilter?dataview_id='+sessionStorage.getItem("dataviewId")+'&collection_id='+sessionStorage.getItem("selectedCollId"),
+            url: 'http://localhost:3000/users/getDataViewFilter?dataview_id='+sessionStorage.getItem("dataviewId")+'&collection_id='+sessionStorage.getItem("selectedCollId"),
             method: 'GET',
             async : false,
             success: function ( result, request) { 

@@ -3,13 +3,13 @@ var router = express.Router();
 var Converter=require("csvtojson").core.Converter;
 var fs=require("fs");
 var monk = require('monk');
-var db = monk('localhost:27017/nodetest');
+var db = monk('localhost:27017/smartdb');
  var dateFormat = require('dateformat');
  var type = require('type-of-is');
  var mapreduce = require('mapred')();
  var random = require("node-random");
  var mongojs = require('mongojs');
-var db1= mongojs('localhost:27017/nodetest',['tempDataViewList','temp_results']);
+var db1= mongojs('localhost:27017/smartdb',['tempDataViewList','temp_results']);
 
 /* GET users listing. */
 router.post('/saveCollection', function(req, res,next) {
@@ -64,7 +64,7 @@ console.log('inside try::'+docs.length);
 				db.get("CollectionData").insert(jsonObj,function(err)
 	    		{
 	    			if (err) return next(err);
-	    			console.log("insert success:");
+	    			console.log("collection data inserted successfully:");
 					res.send({success:true});
 	    		});
 
@@ -116,7 +116,8 @@ router.post('/deleteCollection', function(req, res,next) {
 				//var coll_Id = req.param("coll_Id");
 		  	db.get("CollectionList").remove({_id: collection_Id}, function(err){
 				if (err) return next(err);
-				db.get("CollectionData").remove({'collection_id': collection_Id}, function(err){
+				console.log('collection entry removed:');
+				db1.collection("CollectionData").remove({'collection_id': mongojs.ObjectId(collection_Id)}, function(err){
 					if (err) return next(err);
 					console.log('delete success');
 
@@ -194,8 +195,9 @@ router.get('/visualizeData', function(req, res,next) {
 	 filterby=req.param("filterby");
 	console.log("filterby:"+filterby);
 	var filterbyArr = JSON.parse(filterby);
+	console.log("here:");
      //db1.collection('CollectionList').findOne({_id:mongojs.ObjectId(coll_id)},{"data":true,"_id":false},function(err,doc){
-     	db1.collection("CollectionData").find({'collection_id':coll_id}, {'collection_id':false},function(err, docs){
+     	db1.collection("CollectionData").find({'collection_id':mongojs.ObjectId(coll_id)}, {'collection_id':false},function(err, docs){
      	  if (err) {
 	  			   console.log('error message:'+err.message);
 	  			  return next(err);
@@ -203,7 +205,8 @@ router.get('/visualizeData', function(req, res,next) {
       var dataJsonArr = docs;
       if(filterbyArr.length>0)
       {
-      getFilterExpression(filterbyArr,function(filterExpression){
+      getFilterExpression(filterbyArr,function(err,filterExpression){
+      	if (err) return next(err);
            console.log('filterExpression:'+filterExpression);
            getfilteredData(docs,filterExpression,function(err,resultDataArr){
            	if (err) return next(err);	  			   
@@ -276,11 +279,12 @@ db1.collection('CollectionList').find({},{"dataViews":true,"_id":false},function
 	var filterby = dvAttrJson['filterby'];
 	console.log("filterby:"+filterby);
 	var filterbyArr =filterby;// JSON.parse(filterby);
-     db1.collection("CollectionData").find({'collection_id':collection_id}, {'collection_id':false},function(err, docs){
+     db1.collection("CollectionData").find({'collection_id':mongojs.ObjectId(collection_id)}, {'collection_id':false},function(err, docs){
       var dataJsonArr = doc["data"]; 
       if(filterbyArr.length>0)
       {
-      getFilterExpression(filterbyArr,function(filterExpression){
+      getFilterExpression(filterbyArr,function(err,filterExpression){
+      	if (err) return next(err);
            console.log('filterExpression:'+filterExpression);
            getfilteredData(docs,filterExpression,function(err,resultDataArr){
            	if (err) return next(err);
@@ -345,19 +349,20 @@ router.post('/saveDataViews', function(req, res) {
 	var chartType = req.param("chartType");	
 	var dvDesc = req.param("dataViewDesc");  	
 	var activity_type =req.param("activity_type");
+	var user_id = req.session.userID;
 	console.log('activity_type:'+activity_type+"coll id:"+coll_id);
 	var dataViewJson = {
 	 	"collection_id" : coll_id,
  		"dataview_name" : dvName,
- 		"source":collName,
+ 		"source":'',
  		"filterby":filterbyArr,
  		"group_by":dim,
  		"measure":measure,
  		"aggregation_type":aggType,
  		"visualization_type":chartType,
  		"dataview_desc":dvDesc,
- 		"no_of_records":no_of_records,
- 		"update_date" : dateFormat()
+ 		"update_date" : dateFormat,
+ 		"user_id":user_id
  		};
 	//begin save
    if(activity_type=='create')
@@ -423,11 +428,11 @@ router.get('/getDataViews', function(req, res,next) {
 	console.log("activityType:"+activityType);
 	if(activityType=='create')
 	{
- 	db1.collection("CollectionData").find({'collection_id':collection_id}, {'collection_id':false},function(err, docs){
+ 	db1.collection("CollectionData").find({'collection_id':mongojs.ObjectId(collection_id)}, {'collection_id':false},function(err, docs){
  	if(err) return next(err); 	
- 	var resultJson = addDataTypesJson(docs,start,limit);
- 	console.log('resultJson:'+resultJson);
- 	res.json(resultJson); // set doc[data], measures and dimensions in session		
+ 	var resultJsonArr = addDataTypesJson(docs,start,limit);
+ 	console.log('resultJson length:'+resultJsonArr[1].length);
+ 	res.json(resultJsonArr); // to find size of a json object Object.keys(resultJson).length. not sure if it works in IE!		
 	});
  }
  else
@@ -439,22 +444,23 @@ router.get('/getDataViews', function(req, res,next) {
 	var filterbyArr = doc["filterby"];
 	if(filterbyArr==undefined || filterbyArr.length==0)
 	{
-		db1.collection("CollectionData").find({'collection_id':collection_id},{'collection_id':false}, function(err, docs){
+		db1.collection("CollectionData").find({'collection_id':mongojs.ObjectId(collection_id)},{'collection_id':false}, function(err, docs){
 	 	if(err) return next(err); 	
-	 	var resultJson = addDataTypesJson(docs,start,limit);
-	 	res.json(resultJson); // set doc[data], measures and dimensions in session		
+	 	var resultJsonArr = addDataTypesJson(docs,start,limit);
+	 	res.json(resultJsonArr); // set doc[data], measures and dimensions in session		
 		});		
 	}
 	else
 	{
-		getFilterExpression(filterbyArr,function(filterExpression){
+		getFilterExpression(filterbyArr,function(err,filterExpression){
+			if (err) return next(err);
            console.log('filterExpression:'+filterExpression);
-           db1.collection("CollectionData").find({'collection_id':collection_id},{'collection_id':false}, function(err, docs){
+           db1.collection("CollectionData").find({'collection_id':mongojs.ObjectId(collection_id)},{'collection_id':false}, function(err, docs){
 	 	if(err) return next(err); 	
            getfilteredData(docs,filterExpression,function(err,resultDataArr){
            	if (err) return next(err);
-           	var resultJson = addDataTypesJson(resultDataArr,start,limit);
-			res.json(resultJson); // set doc[data], measures and dimensions in session		
+           	var resultJsonArr = addDataTypesJson(resultDataArr,start,limit);
+			res.json(resultJsonArr); // set doc[data], measures and dimensions in session		
            });
        });
 	      	
@@ -471,7 +477,8 @@ router.get('/prepareModifyDataView', function(req, res) { // add filter
 	var dataview_id = req.param("dataview_id");
 db.get("CollectionList").findById(collection_id, function(err, doc){ 
 var filterbyArr = doc["dataViews"][dataview_id]["filterby"];
- getFilterExpression(filterbyArr,function(filterExpression){
+ getFilterExpression(filterbyArr,function(err,filterExpression){
+ 	if (err) return next(err);
            console.log('filterExpression:'+filterExpression);
            getfilteredData(doc["data"],filterExpression,function(err,resultDataArr){
            	if (err) return next(err);
@@ -532,7 +539,7 @@ return xyAxisJson;
 
 function addDataTypesJson(jsonObjArr,start,limit)
 {
-  console.log('start:'+start);
+  console.log('start:'+start+':limit:'+limit+':jsonObjArr length:'+jsonObjArr.length);
 	var firstElementJson = jsonObjArr[0];
 	var dataTypeJson={};
 	var resultJson={};
@@ -560,12 +567,15 @@ function addDataTypesJson(jsonObjArr,start,limit)
     
 }
 //resultArr.push({'total':jsonObjArr.length});
-resultJson['total']=jsonObjArr.length;
-resultJson['data']=[dataTypeJson,jsonObjArr.slice(start,limit)];
+/*resultJson['total']=jsonObjArr.length;
+resultJson['data']=[dataTypeJson,jsonObjArr.slice(start,limit)];*/
 //resultArr.push(dataTypeJson);
 //resultArr.push({'data':[dataTypeJson,jsonObjArr.slice(start-1,limit)]});
+var resultArr=[];
+resultArr=[dataTypeJson,jsonObjArr.slice(start,limit)];
 console.log("end:");
-return resultJson;
+return resultArr;
+
 };
 
 
@@ -859,7 +869,8 @@ res.send({success:true});
 	}
 	else
 	{
-         getFilterExpression(filterbyArr,function(filterExpression){
+         getFilterExpression(filterbyArr,function(err,filterExpression){
+         	if (err) return next(err);
            console.log('filterExpression1:'+filterExpression);
            getfilteredData(doc["data"],filterExpression,function(err,resultDataArr){   
            if (err) return next(err);        	
@@ -933,6 +944,7 @@ res.send({success:true});
 
 	   function getFilterExpression(filterbyArr,callback)
 	  {
+	  	try{
 	  	var expressionMap = {
 	  		"gt":">",
 	  		"gte":">=",
@@ -960,7 +972,13 @@ res.send({success:true});
 
            
 	 });
-	  	callback(filterExpression);
+	  	callback(null,filterExpression);
+	  }
+	  catch(ex)
+	  {
+	  	console.log('inside getFilterExpression catch block'+ex.message);
+	  	callback(ex,null);
+	  }
 	  };
 	 router.get('/testUrl', function(req, res) 
 	  {

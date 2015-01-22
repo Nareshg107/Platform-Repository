@@ -68,7 +68,7 @@ Ext.define('SmartApp.view.dashboard.CreateDashboardWindow', {
 				form.findField('dashboardconfig').setValue(sessionStorage.getItem('dashboardConfig'));
 				var userJson = JSON.stringify(form.getFieldValues());
 				form.submit({
-					url: 'http:///192.168.1.154:3000/users/saveDashboard?activityType='+sessionStorage.getItem('activityType'),
+					url: 'http:///localhost:3000/users/saveDashboard?activityType='+sessionStorage.getItem('activityType'),
 					success: function(form, action) {
 					    var databuttonView= new Ext.create('SmartApp.view.dashboard.DashboardWithButton');		
 						var vport=Ext.getCmp('contentRegionPanel');

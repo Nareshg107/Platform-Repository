@@ -25,7 +25,7 @@ Ext.define('SmartApp.view.app.ListOfAppGrid', {
 			proxy: {
 					type: 'ajax',
 					//url:'resources/data/grid/CollectionData.json',				
-					url: 'http://192.168.1.154:3000/users/appList',
+					url: 'http://localhost:3000/users/appList',
 					reader: {
 						type: 'json'
 						//rootProperty:'data'						

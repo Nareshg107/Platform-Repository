@@ -67,7 +67,7 @@ Ext.define('SmartApp.view.app.CreateAppPage', {
         if(sessionStorage.getItem('activityType')!=null && sessionStorage.getItem('activityType')=='modify') {
 			Ext.Ajax.request({
 			
-				url : 'http://192.168.1.154:3000/users/getAppData?app_id='+sessionStorage.getItem('_id'), 
+				url : 'http://localhost:3000/users/getAppData?app_id='+sessionStorage.getItem('_id'), 
 				method: 'GET',
 				success: function ( result, request) { 
 					
@@ -123,7 +123,7 @@ Ext.define('SmartApp.view.app.CreateAppPage', {
 
 						var userJson = JSON.stringify(form.getFieldValues());
 						form.submit({
-							url: 'http://192.168.1.154:3000/users/saveapp',
+							url: 'http://localhost:3000/users/saveapp',
 							//jsonSubmit : true,
 							success: function(form, action) {
 							  // Ext.Msg.alert('Success', action.result.msg);

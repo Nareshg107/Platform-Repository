@@ -74,7 +74,7 @@ Ext.define('SmartApp.view.home.Header', {
                    
                     handler:function()
                     {           
-                    window.open('http://192.168.1.154:3000/clientapp','width=1000 height=1000, scrollbars=yes, resizable=yes');
+                    window.open('http://localhost:3000/clientapp','width=1000 height=1000, scrollbars=yes, resizable=yes');
                                     
                     }
             }]

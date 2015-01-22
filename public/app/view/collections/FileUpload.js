@@ -57,7 +57,7 @@ Ext.define('SmartApp.view.collections.FileUpload', {
 					handler: function() {
 							var collName     = sessionStorage.getItem("collectionName");
 							var collDesc     = sessionStorage.getItem("collectionDesc");
-							var uploadurl = 'http://192.168.1.154:3000/users/saveCollection?collName='+collName+'&collDesc='+collDesc;
+							var uploadurl = 'http://localhost:3000/users/saveCollection?collName='+collName+'&collDesc='+collDesc;
 
 							if( sessionStorage.getItem("collectionName")!= null || sessionStorage.getItem("collectionName")!='') 
 								sessionStorage.removeItem("collectionName");

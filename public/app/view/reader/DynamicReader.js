@@ -67,7 +67,7 @@ function getFiltervalues() {
     var colFilters = '';
     if(sessionStorage.getItem("activity_type")=='modify' || sessionStorage.getItem("activity_type")=='clone'){
         Ext.Ajax.request({
-            url: 'http://192.168.1.154:3000/users/getDataViewFilter?dataview_id='+sessionStorage.getItem("dataviewId")+'&collection_id='+sessionStorage.getItem("selectedCollId"),
+            url: 'http://localhost:3000/users/getDataViewFilter?dataview_id='+sessionStorage.getItem("dataviewId")+'&collection_id='+sessionStorage.getItem("selectedCollId"),
             method: 'GET',
             async : false,
             success: function ( result, request) { 

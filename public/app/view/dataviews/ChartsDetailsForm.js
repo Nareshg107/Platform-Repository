@@ -3,7 +3,7 @@ Ext.define("Country", {
 		fields : ["dimension","measure"]
 		
 		});		
-		var url1='http://192.168.1.154:3000/users/getDimensionsAndMeasures?collId='+sessionStorage.getItem("selectedCollId")+'&activity_type='+sessionStorage.getItem("activity_type")+'&dataview_id='+sessionStorage.getItem('dataviewId');		
+		var url1='http://localhost:3000/users/getDimensionsAndMeasures?collId='+sessionStorage.getItem("selectedCollId")+'&activity_type='+sessionStorage.getItem("activity_type")+'&dataview_id='+sessionStorage.getItem('dataviewId');		
 			var dimstore = new Ext.data.Store({
 			    model: "Country",	  
 				proxy : {
@@ -17,7 +17,7 @@ Ext.define("Country", {
 				autoLoad : true,	
 			});
 			
-			var url2='http://192.168.1.154:3000/users/getDimensionsAndMeasures?collId='+sessionStorage.getItem("selectedCollId")+'&activity_type='+sessionStorage.getItem("activity_type")+'&dataview_id='+sessionStorage.getItem('dataviewId');
+			var url2='http://localhost:3000/users/getDimensionsAndMeasures?collId='+sessionStorage.getItem("selectedCollId")+'&activity_type='+sessionStorage.getItem("activity_type")+'&dataview_id='+sessionStorage.getItem('dataviewId');
 			var measurestore = new Ext.data.Store({
 			    model: "Country",	  
 				proxy : {
@@ -327,7 +327,7 @@ Ext.define('SmartApp.view.dataviews.ChartsDetailsForm', {
 				
 				/*Ext.Ajax.request(
 						{
-						url : 'http://192.168.1.154:3000/users/visualizeData?coll_id='+collectionId+'&dimension='+dimensionValue+'&measure='+measureValue+'&aggregation_type='+aggregationValue, 
+						url : 'http://localhost:3000/users/visualizeData?coll_id='+collectionId+'&dimension='+dimensionValue+'&measure='+measureValue+'&aggregation_type='+aggregationValue, 
 						method: 'POST',
 						success: function ( result, request) { 
 							console.log('on success:::');												
@@ -401,7 +401,7 @@ Ext.define('SmartApp.view.dataviews.ChartsDetailsForm', {
 							Ext.Ajax.request(
 								{
 								
-								url : 'http://192.168.1.154:3000/users/saveDataViews'+params, 
+								url : 'http://localhost:3000/users/saveDataViews'+params, 
 								method: 'POST',
 								success: function ( result, request) { 
 								console.log('on success:::');		

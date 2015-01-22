@@ -53,7 +53,7 @@ id:'PrepackagedAppContent',
             proxy: {
                     type: 'ajax',
                     //url:'resources/data/grid/CollectionData.json',                
-                    url: 'http://192.168.1.154:3000/users/prepackagedAppList',
+                    url: 'http://localhost:3000/users/prepackagedAppList',
                     reader: {
                         type: 'json'
                         //rootProperty:'data'                       

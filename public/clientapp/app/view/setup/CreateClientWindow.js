@@ -8,7 +8,7 @@ Ext.define('ClientApp.view.setup.CreateClientWindow', {
 					Ext.Ajax.request(
 									{
 									
-									url : 'http://192.168.1.154:3000/users/getClientData?client_id='+sessionStorage.getItem('_cid'), 
+									url : 'http://localhost:3000/users/getClientData?client_id='+sessionStorage.getItem('_cid'), 
 									method: 'GET',
 									success: function ( result, request) { 
 										
@@ -119,7 +119,7 @@ Ext.define('ClientApp.view.setup.CreateClientWindow', {
 				var userJson = JSON.stringify(form.getFieldValues());
 				//alert(userJson);
                 form.submit({
-					url: 'http://192.168.1.154:3000/users/saveClientDetails',
+					url: 'http://localhost:3000/users/saveClientDetails',
 					//jsonSubmit : true,
                     success: function(form, action) {
                       // Ext.Msg.alert('Success', action.result.msg);

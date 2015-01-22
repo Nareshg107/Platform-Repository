@@ -17,7 +17,7 @@ Ext.define('SmartApp.view.chart.TabularView', {
            
             proxy: {
                     type: 'ajax',         
-                   url : 'http://192.168.1.154:3000/users/visualizeData?coll_id='+collectionId+'&dimension='+dimensionValue+'&measure='+measureValue+'&aggregation_type='+aggregation_type+'&filterby='+filterby, 
+                   url : 'http://localhost:3000/users/visualizeData?coll_id='+collectionId+'&dimension='+dimensionValue+'&measure='+measureValue+'&aggregation_type='+aggregation_type+'&filterby='+filterby, 
                    method: 'GET',
                     reader: {
                         type: 'json'
