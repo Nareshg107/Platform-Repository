@@ -114,7 +114,7 @@ tools: [{
 
 										sessionStorage.removeItem("activity_type");
 										sessionStorage.setItem("activity_type","clone");
-										var dataviewId=row.get('dataview_id');
+										var dataviewId=row.get('_id');
 										var collectionId=row.get('collection_id');
 										var measureValue=row.get('measure');							
 										var visualizationValue=row.get('visualization_type');
