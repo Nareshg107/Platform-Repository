@@ -13,7 +13,6 @@ var db1= mongojs('localhost:27017/smartdb',['tempDataViewList','temp_results']);
 
 /* GET users listing. */
 router.post('/saveCollection', function(req, res,next) {
-	
 	console.log("col name:"+req.param("collName"));
 	console.log("col Desc:"+req.param("collDesc"));
 	var collection_name = req.param("collName");
@@ -280,7 +279,7 @@ router.get('/getChartForDB', function(req, res,next) {
 	var filterby = doc['filterby'];
 	console.log("filterby:"+filterby);
 	var filterbyArr =filterby;// JSON.parse(filterby);
-     db1.collection("CollectionData").find({'collection_id':mongojs.ObjectId(collection_id)}, {'collection_id':false},function(err, docs){
+     db1.collection("CollectionData").find({'collection_id':mongojs.ObjectId(coll_id)}, {'collection_id':false},function(err, docs){
       
       if(filterbyArr.length>0)
       {

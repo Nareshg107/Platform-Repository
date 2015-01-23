@@ -8,7 +8,7 @@ Ext.define('SmartApp.model.InsightGridModel', {
 // extend: 'SmartApp.model.Base',
     fields: [
 	{
-			name: 'dataview_id',type:'string'
+			name: '_id',type:'string'
 	},{
         name: 'collection_id',type:'string'
     },{

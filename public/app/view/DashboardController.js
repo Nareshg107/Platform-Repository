@@ -111,7 +111,7 @@ Ext.define('SmartApp.view.DashboardController', {
 
 		var panelName = data.records[0].data.dataview_name;
 		sessionStorage.removeItem('dataview_id');
-		sessionStorage.setItem('dataview_id',data.records[0].data.dataview_id);
+		sessionStorage.setItem('dataview_id',data.records[0].data._id);
 		//alert(data.records[0].data.visualization_type);
 
         var partsName = panelName;
@@ -120,7 +120,7 @@ Ext.define('SmartApp.view.DashboardController', {
 
         partsName = partsName.replace(/\W/g, '');
 
-        var dataview_id = data.records[0].data.dataview_id;
+        var dataview_id = data.records[0].data._id;
 
 		var visualizationValue = data.records[0].data.visualization_type;
 		if(sessionStorage.getItem('dataview_id') != null){
