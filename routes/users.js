@@ -3,13 +3,13 @@ var router = express.Router();
 var Converter=require("csvtojson").core.Converter;
 var fs=require("fs");
 var monk = require('monk');
-var db = monk('localhost:27017/smartdb');
+var db = monk('localhost:27017/nodetest');
  var dateFormat = require('dateformat');
  var type = require('type-of-is');
  var mapreduce = require('mapred')();
  var random = require("node-random");
  var mongojs = require('mongojs');
-var db1= mongojs('localhost:27017/smartdb',['tempDataViewList','temp_results']);
+var db1= mongojs('localhost:27017/nodetest',['tempDataViewList','temp_results']);
 
 /* GET users listing. */
 router.post('/saveCollection', function(req, res,next) {
@@ -1240,5 +1240,21 @@ router.get('/getDataViewFilter', function(req, res,next) {
 		res.json(filterbyArr);  
 	});
 });
+
+router.get('/getDashboardByApp', function(req, res,next) {
+	var app_id = req.param("app_id");
+	db1.collection('app').findOne({_id:mongojs.ObjectId(app_id)},{"selecteddashboards":true,"_id":false},function(err,doc){
+   		if(err) return next(err);
+   		var insightLisrStr = doc['selecteddashboards'];
+   		var insightListArr = insightLisrStr.split(',');
+   		var resultJson = {};
+   			insightListArr.forEach(function(insight){	
+           resultJson[insight]=insight;
+ 	});
+ 		res.json(resultJson); 	
+	});
+});
+
+
 
 module.exports = router;
