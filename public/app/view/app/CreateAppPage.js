@@ -63,17 +63,23 @@ Ext.define('SmartApp.view.app.CreateAppPage', {
         this.callParent();        
     },	
 	onBoxReady: function(){
+		// sessionStorage.removeItem('app_id');
+         // alert('App id'+sessionStorage.getItem('app_id')+sessionStorage.getItem('activityType'));
         
         if(sessionStorage.getItem('activityType')!=null && sessionStorage.getItem('activityType')=='modify') {
 			Ext.Ajax.request({
 			
-				url : 'http://localhost:3000/users/getAppData?app_id='+sessionStorage.getItem('_id'), 
+				url : 'http://localhost:3000/users/getAppData?app_id='+sessionStorage.getItem('app_id'), 
 				method: 'GET',
 				success: function ( result, request) { 
 					
 					console.log('on success:::'+result);												
 					response = result.responseText;
-					res = eval('(' + response + ')');																		
+					res = eval('(' + response + ')');	
+					console.log(res._id);
+					console.log(sessionStorage.getItem('app_id'));	
+					console.log(res.name);	
+																		
 					var usermodel = Ext.create('SmartApp.model.AppModel',	{
 						_id: res._id,
 						name: res.name,

@@ -22,7 +22,7 @@ Ext.define('SmartApp.view.collections.DyanamicGridWithBackButton', {
 			text:' Back ', 
 			handler:function()
 			{			
-			var createDataConnectionView= new Ext.create('SmartApp.view.dataviews.DataViewwithButton');		
+			var createDataConnectionView= new Ext.create('SmartApp.view.collections.CollectionwithButton');		
 							var vport=Ext.getCmp('contentRegionPanel');
 							vport.removeAll(true,true);
 							vport.add(createDataConnectionView);	

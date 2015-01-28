@@ -33,7 +33,9 @@ Ext.define('SmartApp.view.home.Header', {
                     text: sessionStorage.getItem('clientName'),
                     width: 160,
                     menu: {
-                        items: [{
+                        items: [ 
+
+                        {
                                    // xtype:'button',
                                     text : 'Logout',
                                     handler:function()
