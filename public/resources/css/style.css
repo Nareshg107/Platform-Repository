@@ -30,13 +30,7 @@ background: #F7F8F8;
 	border:none;
 	font-family: 'Roboto', sans-serif;
 }
-.eka-header-logo  {
-	background-image:url(../images/InSight-CM-logo.png);
-	background-repeat:no-repeat;
-	min-width:186px;
-	min-height:46px;
-	margin:5px 10px; 
-}
+
 .eka-header-logo .x-panel-header-default {
 	background-color: transparent;
 }
