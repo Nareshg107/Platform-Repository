@@ -2169,3 +2169,8 @@ color: #FFF;
 text-align:center;
 margin-top:50px;
 }
+.myimagebutton {
+    width:20px!important; height:50px!important;
+    border-color: #DDE7EF!important; 
+    background-image: url('../../resources/images/button-left.png') !important; background-color: #ffffff!important; border:none
+}

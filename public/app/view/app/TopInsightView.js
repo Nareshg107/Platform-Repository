@@ -30,8 +30,9 @@
                                  layout:'hbox',
                                  items:[{
                                     xtype:'button',
-                                    text:'back',
-                                    cls:'button-primary',
+                                   // text:'back',
+                                 //   cls:'button-primary',
+                                    cls : 'myimagebutton',
                                     margin:'10 10 0 7',
                                     listeners:{
                                                 click:function()
