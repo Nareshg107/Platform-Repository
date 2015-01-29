@@ -9,12 +9,13 @@ var db = monk('localhost:27017/smartdb');
  var mapreduce = require('mapred')();
  var random = require("node-random");
  var mongojs = require('mongojs');
-var db1= mongojs('localhost:27017/smartdb',['tempDataViewList','temp_results']);
+var async = require("async");
+
+var db1= mongojs('localhost:27017/nodetest',['tempDataViewList','temp_results']);
 
 /* GET users listing. */
 router.post('/saveCollection', function(req, res,next) {
 	console.log("col name:"+req.param("collName"));
-	console.log("col Desc:"+req.param("collDesc"));
 	var collection_name = req.param("collName");
 	var collection_desc = req.param("collDesc");
   	console.log("file name12:"+req.files.myFile.name); 
@@ -28,55 +29,55 @@ csvConverter.on("end_parsed",function(jsonObj){
 	console.log("p5:"+new Date());
 	//jsonObj=null;
 	var noOfRecs = jsonObj.length;
-	console.log('noOfRecs'+noOfRecs);
-	
+	console.log('noOfRecs'+noOfRecs);	
 	if(noOfRecs==0)
 		throw new Error('Application Error: File has no data to upload');
-
 	//Identify dimensions and measures
 	var xyAxis = getDimensionsandMeasures(jsonObj);
-	console.log("xyAxis:"+xyAxis);
-
 	var newDate = dateFormat();
-	console.log("newDate:"+newDate);
 	var user_id = req.session.userID;
 	//duplicate check
     db1.collection('CollectionList').find({"collection_name":eval('/^'+collection_name+'/i')},{},function(err,docs){
     	console.log('inside dup check call back');
     	if(err) return next(err);
     	try{
-console.log('inside try::'+docs.length);
-    if(docs.length==0)
- 		{
- 			//insert collection
- 			  db.get("CollectionList").insert({"user_id":user_id,"collection_name":collection_name,"source":"CSV","description":collection_desc,
-				"no_of_records":noOfRecs,"update_date":newDate,"status":"Processed",
-				"xyAxis":xyAxis},function(err,doc){
-				if(err) return next(err);				
-				console.log('Inside insert call back'+doc['_id']);
-				//Add collection ID to all elements of the array
-				var collection_id = doc['_id'];
-				jsonObj.forEach(function(doc) {// #performance. Try avoiding the loop
-					doc['collection_id']=collection_id;
-				});
-				console.log("loop done");
-				db.get("CollectionData").insert(jsonObj,function(err)
-	    		{
-	    			if (err) return next(err);
-	    			console.log("collection data inserted successfully:");
-					res.send({success:true});
-	    		});
-
-					
-				});
- 		}
- 		else
- 		{
- 			console.log('duplicate collection');
- 			//res.send({success:false,'msg':'Collection name already exists. Please enter a different name.'});
- 			throw new Error('Application Error: Collection name already exists. Please enter a different name');
- 		}
- 	}
+			console.log('inside try::'+docs.length);
+		    if(docs.length==0)
+		 		{
+		 			//insert collection
+		 			  db.get("CollectionList").insert({"user_id":user_id,"collection_name":collection_name,"source":"CSV","description":collection_desc,
+						"no_of_records":noOfRecs,"update_date":newDate,"status":"Processed",
+						"xyAxis":xyAxis},function(err,doc){
+						if(err) return next(err);		
+						try{		
+						console.log('Inside insert call back'+doc['_id']);
+						//Add collection ID to all elements of the array
+						var collection_id = doc['_id'];
+						jsonObj.forEach(function(doc) {// #performance. Try avoiding the loop
+							doc['collection_id']=collection_id;
+						});
+						console.log("loop done");
+						db.get("CollectionData").insert(jsonObj,function(err)
+			    		{
+			    			if (err) return next(err);
+			    			console.log("collection data inserted successfully:");
+							res.send({success:true});
+			    		});
+						}
+						catch(ex)
+						{
+							throw ex;
+						}
+							
+						});
+		 		}
+		 		else
+		 		{
+		 			console.log('duplicate collection');
+		 			//res.send({success:false,'msg':'Collection name already exists. Please enter a different name.'});
+		 			throw new Error('Application Error: Collection name already exists. Please enter a different name');
+		 		}
+ 	     }
  	catch(ex)
  	{
  		console.log('exception inside catch:'+ex.message); 
@@ -107,7 +108,8 @@ router.post('/deleteCollection', function(req, res,next) {
 	console.log('inside delete:'+req.session.username);
 	var collection_Id = req.param("coll_Id");
 	//check for child dataviews
-		db1.collection('DataViewList').find({'collecion_id':collection_Id}, function(err, doc){ 			
+		db1.collection('DataViewList').find({'collecion_id':collection_Id}, function(err, doc){
+		  if(err) return next(err);
 			if(doc.length>0)
 				throw new Error('Application Error: Cannot delete the collection. Dataviews exist on this collection');
 			else
@@ -132,8 +134,7 @@ router.post('/deleteCollection', function(req, res,next) {
 router.post('/deleteDataView', function(req, res,next) {
 var dataview_id = req.param("dataview_id");
   	db.get("DataViewList").remove({_id: dataview_id}, function(err){
-		if (err) 
-			return next(err);		
+		if (err) return next(err);		
 	});
 res.send({success:true});
 	
@@ -142,24 +143,52 @@ res.send({success:true});
 router.get('/getCollectionList', function(req, res,next) {
 	
 	var user_id = req.session.userID;
-	console.log("json collection list1:"+user_id+":"+req.session.username); 
 	  db1.collection('CollectionList').find({"user_id":user_id},{"xyAxis":false},function(e,docs){
-	  	 if(e)
-		  	 	return next(e);
-	  	console.log("json collection list arr:"+docs); 
+	  	 if(e)	return next(e);
     res.json(docs);
   })
-	//res.json(db.get("CollectionList").find());
-
 });
 
-router.get('/getDataViewList', function(req, res,next) {
-	
-	var user_id = req.session.userID;
-	console.log("json DV list1:"+user_id+":"+req.session.username); 
-	  db1.collection('DataViewList').find({"user_id":user_id},{},function(e,docs){
-	  	 if(e) return next(e);	  	
-    res.json(docs);
+router.get('/getDataViewList', function(req, res,next) {	
+		var user_id = req.session.userID;
+	   db1.collection('DataViewList').find({"user_id":user_id},{},function(e,docs){	  	
+	  	 if(e) return next(e);	  
+	  	 //set no of records
+			async.each(docs,function(doc,callback)
+				{
+					try{
+					var filterby = doc['filterby'];
+				var coll_id = doc['collection_id'];
+				console.log("filterby:"+filterby);
+				var filterbyArr =filterby;// JSON.parse(filterby);
+			     db1.collection("CollectionData").find({'collection_id':mongojs.ObjectId(coll_id)}, {'collection_id':false},function(err, docs){        
+					      if(filterbyArr.length>0)
+					      {
+					      getFilterExpression(filterbyArr,function(err,filterExpression){
+					      	if (err) return next(err);
+					           console.log('filterExpression:'+filterExpression);
+					           getfilteredData(docs,filterExpression,function(err,resultDataArr){
+					           	if (err) return next(err);
+						        doc['no_of_records']=resultDataArr.length;
+					           });
+						  	});
+					     }
+					     else
+					     {
+					     	doc['no_of_records']=docs.length;
+					     }
+					      callback();
+					 });
+			     }
+						catch(ex)
+						{
+							return next(ex);
+						}
+				},function(err){
+			   // console.log('inside async callback');
+			    res.json(docs);
+			  });
+    
   });	
 
 });
@@ -182,51 +211,47 @@ router.get('/getDimensionsAndMeasures', function(req, res,next) {
 });
 
 router.get('/visualizeData', function(req, res,next) {
-	console.log("inside visualizeData:");
 	var coll_id = req.param("coll_id");
 	var dimension = req.param("dimension");
 	var measure = req.param("measure");
 	var aggregation_type = req.param("aggregation_type");
-	//coll_id="5489a42590f6b3740e6cd07c";
-	//filter data
 	var resultDataArr =[];
 	var filterby =[];
 	 filterby=req.param("filterby");
 	console.log("filterby:"+filterby);
+    try{
 	var filterbyArr = JSON.parse(filterby);
-	console.log("here:");
-     //db1.collection('CollectionList').findOne({_id:mongojs.ObjectId(coll_id)},{"data":true,"_id":false},function(err,doc){
      	db1.collection("CollectionData").find({'collection_id':mongojs.ObjectId(coll_id)}, {'collection_id':false},function(err, docs){
-     	  if (err) {
-	  			   console.log('error message:'+err.message);
-	  			  return next(err);
-	  			   }	  
+     	  if (err) return next(err);
+      try{	  
       var dataJsonArr = docs;
       if(filterbyArr.length>0)
       {
-      getFilterExpression(filterbyArr,function(err,filterExpression){
+        getFilterExpression(filterbyArr,function(err,filterExpression){
       	if (err) return next(err);
+      	try{
            console.log('filterExpression:'+filterExpression);
            getfilteredData(docs,filterExpression,function(err,resultDataArr){
-           	if (err) return next(err);	  			   
-	 console.log("inside visualizeData resultDataArr:"+resultDataArr);  
-     db.get("tempDataViewList").insert(resultDataArr,function(err){//try javascript map reduce. write on ur own.
-     		if (err) {
-	  			   console.log('error message:'+err.message);
-	  			  return next(err);
-	  			   }
-      aggregateByMapReduce(dimension,measure,aggregation_type,function(err,docs){
-      		if (err) {
-	  			   console.log('error message:'+err.message);
-	  			  return next(err);
-	  			   }
-     	console.log("docs1:::"+docs);
-     	res.json(docs);
-     });
-     
-          
-     });
+           	if (err) return next(err);	  	
+           	try{
+     		db.get("tempDataViewList").insert(resultDataArr,function(err){//try javascript map reduce. write on ur own.
+     		if (err) return next(err);
+      		aggregateByMapReduce(dimension,measure,aggregation_type,function(err,docs){
+      		if (err) return next(err);
+     			res.json(docs);
+		     });
+		     });
+     		}
+           catch(ex)
+				{
+					return next(ex);
+				}
            });
+         }
+           catch(ex)
+				{
+					return next(ex);
+				}
 	  	});
      }
      else
@@ -247,9 +272,17 @@ router.get('/visualizeData', function(req, res,next) {
      });
 
      }
-
+     }
+     catch(ex)
+		{
+			throw ex;
+		}
      });
-	
+	}
+	catch(ex)
+	{
+		return next(ex);
+	}
 	
 	
 	
@@ -259,65 +292,66 @@ router.get('/getChartForDB', function(req, res,next) {
 	console.log("inside getChartForDB:");
 	var dvID = req.param("dataview_id");
 	console.log('dvID'+dvID);
-	//dvID='DV-2';
 	try{
 	if(dvID!=null && dvID!=undefined&&dvID!='null' )
 	{
-//get chart
-//db1.collection('DataViewList').find({},{},function(e,docs){
 	db.get("DataViewList").findById(dvID, function(err, doc){ 
-	  	//console.log("json collection list arr:"+JSON.stringify(docs)); 
-	  	
-	  	//	getDVAttributes(docs,dvID,function(err,dvAttrJson){//get doc data as well
-	  			if (err) return next(err);
-              console.log('inside callback getDVAttributes');
-              var dimension = doc['group_by'];
-			  var measure = doc['measure'];
-			  var aggregation_type = doc['aggregation_type'];
-			  var coll_id = doc['collection_id'];
-//in 
-	var filterby = doc['filterby'];
-	console.log("filterby:"+filterby);
-	var filterbyArr =filterby;// JSON.parse(filterby);
-     db1.collection("CollectionData").find({'collection_id':mongojs.ObjectId(coll_id)}, {'collection_id':false},function(err, docs){
-      
-      if(filterbyArr.length>0)
-      {
-      getFilterExpression(filterbyArr,function(err,filterExpression){
-      	if (err) return next(err);
-           console.log('filterExpression:'+filterExpression);
-           getfilteredData(docs,filterExpression,function(err,resultDataArr){
-           	if (err) return next(err);
-	console.log("inside visualizeData resultDataArr:"+resultDataArr);  
-     db.get("tempDataViewList").insert(resultDataArr,function(){//try javascript map reduce. write on ur own.
-      aggregateByMapReduce(dimension,measure,aggregation_type,function(err,docs){
-     	console.log("docs1:::"+docs);
-     	res.json(docs);
-     });
-     
-          
-     });
-           });
-	  	});
-     }
-     else
-     {
-     	 db.get("tempDataViewList").insert(docs,function(){//try javascript map reduce. write on ur own.
-      aggregateByMapReduce(dimension,measure,aggregation_type,function(err,docs){
-     	console.log("docs1:::"+docs);
-     	res.json(docs);
-     });         
-     });
+	  	if (err) return next(err);
+	  	try{
+			              var dimension = doc['group_by'];
+						  var measure = doc['measure'];
+						  var aggregation_type = doc['aggregation_type'];
+						  var coll_id = doc['collection_id'];
+						  var filterby = doc['filterby'];
+					      console.log("filterby:"+filterby);
+						  var filterbyArr =filterby;// JSON.parse(filterby);
+			     db1.collection("CollectionData").find({'collection_id':mongojs.ObjectId(coll_id)}, {'collection_id':false},function(err, docs){      
+			     	if (err) return next(err);
+			     try{
+				      if(filterbyArr.length>0)
+				      {
+				      getFilterExpression(filterbyArr,function(err,filterExpression){
+				      	if (err) return next(err);
+				      	console.log('filterExpression:'+filterExpression);
+				      	try{				        
+					        getfilteredData(docs,filterExpression,function(err,resultDataArr){
+					         if (err) return next(err); 
+					         db.get("tempDataViewList").insert(resultDataArr,function(){//try javascript map reduce. write on ur own.
+							         aggregateByMapReduce(dimension,measure,aggregation_type,function(err,docs){
+									     	if (err) return next(err);
+									     	res.json(docs);
+									     });
+							     });
 
-     }
+					           });
+				        }
+					     catch(ex)
+							{
+								return next(ex);
+							}
+					  	});
+				     }
+				     else
+				     {
+				     	 db.get("tempDataViewList").insert(docs,function(){//try javascript map reduce. write on ur own.
+				      aggregateByMapReduce(dimension,measure,aggregation_type,function(err,docs){
+				     	if (err) return next(err);
+				     	res.json(docs);
+				     });         
+				     });
 
-     });
-
-//out
-
-	  		
-	  	
-   
+				     }
+			 	}
+			     catch(ex)
+					{
+						return next(ex);
+					}
+			     });
+			}
+           catch(ex)
+				{
+					return next(ex);
+				}
   });
 }
 else
@@ -336,12 +370,11 @@ console.log('error message:'+ex.message);
 
 
 router.post('/saveDataViews', function(req, res) {	
-	//return next(new Error('test error'));
+
 	var dvName = req.param("dataViewName");
 	var dvID = req.param("dataview_id");
 	var coll_id = req.param("collId");	
 	var filterby = req.param("filterby");
-	console.log('filterby:'+filterby);
 	var filterbyArr = JSON.parse(filterby);
 	var dim = req.param("dimension");
 	var measure = req.param("measure");
@@ -350,11 +383,11 @@ router.post('/saveDataViews', function(req, res) {
 	var dvDesc = req.param("dataViewDesc");  	
 	var activity_type =req.param("activity_type");
 	var user_id = req.session.userID;
-	console.log('activity_type:'+activity_type+"coll id:"+coll_id);
+	console.log('filterby:'+filterby+'activity_type:'+activity_type+"coll id:"+coll_id);
+	try{
 	var dataViewJson = {
 	 	"collection_id" : coll_id,
  		"dataview_name" : dvName,
- 		"source":'',
  		"filterby":filterbyArr,
  		"group_by":dim,
  		"measure":measure,
@@ -364,13 +397,13 @@ router.post('/saveDataViews', function(req, res) {
  		"update_date" : dateFormat,
  		"user_id":user_id
  		};
-	//begin save
    if(activity_type=='create')
     {
     	//Duplicate check
     	db1.collection('DataViewList').find({"dataview_name":eval('/^'+dvName+'/i')},{},function(err,docs)
     	{
     		if (err) return next(err);
+    	try{
     	if(docs.length==1)
     	{
     		console.log('duplicate data view:');
@@ -378,20 +411,29 @@ router.post('/saveDataViews', function(req, res) {
         }
     	else
  		 {
-    	db.get("DataViewList").insert(dataViewJson,function(err)
-    		{
-    			if (err) return next(err);
-    			console.log("insert success:");
-				res.send({success:true});
-    		});
+ 		 db1.collection('CollectionList').findOne({_id:mongojs.ObjectId(coll_id)},{"collection_name":true},function(err,doc){
+ 		 	if (err) return next(err);
+ 		 	 dataViewJson["source"] = doc["collection_name"];
+		    	db.get("DataViewList").insert(dataViewJson,function(err)
+		    		{
+		    			if (err) return next(err);
+		    			console.log("insert success:");
+						res.send({success:true});
+		    		});
+		    })
     	}
+    }
+    catch(ex)
+		{
+			return next(ex);
+		}
     });
     }
     else
     {
     //Duplicate check
     	db1.collection('DataViewList').find({_id:{$ne:mongojs.ObjectId(dvID)},"dataview_name":eval('/^'+dvName+'/i')},{},function(err,docs){
-    		if (err) return next(err);
+    	if (err) return next(err);
     	if(docs.length==1)
     	{
     		console.log('duplicate data view:');
@@ -399,7 +441,7 @@ router.post('/saveDataViews', function(req, res) {
         }
     	else
  		 {
-	db1.collection('DataViewList').update(
+		db1.collection('DataViewList').update(
 				{_id:mongojs.ObjectId(dvID)},
 				dataViewJson,
 				function (err) {
@@ -411,7 +453,11 @@ router.post('/saveDataViews', function(req, res) {
 	});
 	
 	}
-	//end
+}
+catch(ex)
+{
+	return next(ex);
+}
 
 	});
 
