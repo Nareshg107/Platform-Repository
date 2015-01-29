@@ -1,32 +1,170 @@
-Ext.define('SmartApp.view.app.TopInsightView', {
+ Ext.define('SmartApp.view.app.TopInsightView', {
      extend : 'Ext.form.Panel',
      xtype: 'TopInsightView',
+     itemId:'TopInsightView',
 
     width: '100%',
    autoScroll: true,
     height: window.innerHeight-100,
     overflowY:'auto',
-   // id: 'Parent',
-   /*layout: {
-        type: 'hbox',
-        align: 'stretch',
-        pack: 'center'                    
-    },*/
+     initComponent: function() {
+
+            var insightname = sessionStorage.getItem('insightId');
+            var app_name=sessionStorage.getItem('app_name');
+            var out=sessionStorage.getItem('insightsArrJson');
+            var data=Ext.JSON.decode(out);
+            var dashboardModelStore = new Ext.data.Store({ 
+                           fields : [{
+                                        name: '_id',type:'string'
+                                    },{
+                                        name: 'name',type:'string'
+                                    }],
+                                 data:data                                
+                            });
+
+            Ext.apply(this, {
+                         items: [ {
+                                    margin:'0 0 0 7',
+                                    html:'<h3> App Name : '+sessionStorage.getItem('app_name')+'</h3>'
+                                }, {
+                                 layout:'hbox',
+                                 items:[{
+                                    xtype:'button',
+                                   // text:'back',
+                                 //   cls:'button-primary',
+                                    cls : 'myimagebutton',
+                                    margin:'10 10 0 7',
+                                    listeners:{
+                                                click:function()
+                                                                {
+                                                var appGridWithButton= new Ext.create('SmartApp.view.app.AppGridWithButton');      
+                                                var vport=Ext.getCmp('contentRegionPanel');
+                                                vport.removeAll(true, true);
+                                                vport.add(appGridWithButton); 
+
+                                            }
+
+                                    }
+                                     },{
+                                            xtype: 'combo',
+                                            itemId : 'dashnameId',
+                                            margin:'10 10 10 10',
+                                            width:'30%',
+                                           // id:'inSightComboId',
+                                           store: dashboardModelStore,
+                                            displayField: 'name',
+                                            valueField:'_id',
+                                            name:'name',
+                                            listeners: {
+                                                  beforerender: function(combo, value) {                             
+                                                       combo.setValue(sessionStorage.getItem('insightId'));
+
+                                                  },
+                                                select: function(combo, records, eOpts){
+                                                // change: function(combo, value) {                       
+                                                  var insightname1= Ext.ComponentQuery.query('#dashnameId')[0].getRawValue();
+                                               
+                                                   insightname=insightname1
+                                                   sessionStorage.removeItem('insightId');
+                                                   
+                                                sessionStorage.setItem('insightId',insightname);
+                                                 console.log('changed insightname:-'+sessionStorage.getItem('insightId'));
+
+                                
+                                               var topInsightView= new Ext.create('SmartApp.view.app.TopInsightView');      
+                                                var vport=Ext.getCmp('contentRegionPanel');
+                                                vport.removeAll(true, true);
+                                                vport.add(topInsightView);                    
+
+                                                    }
+
+                                            }
+
+                                    },{
+                                        width:'20%',
+                                        margin:'10 10 10 250',
+                                        itemId:'htmlInsightName',
+                                       html:'<h3>'+sessionStorage.getItem('insightId')+'</h3>' 
+                                    },{
+       
+                                        xtype:'button',
+                                        itemId:'modifyButtonId',
+                                        
+                                        cls:'button-primary',
+                                        margin:'10 10 0 350',
+                                        text:'Modify',  
+                                        listeners:{         
+                                            click: function(btn) {
+                                                    sessionStorage.removeItem('activityType');
+                                                    sessionStorage.setItem('activityType','modify');
+                                                    var appGridWithButton= new Ext.create('SmartApp.view.app.CreateAppPage');      
+                                                    var vport=Ext.getCmp('contentRegionPanel');
+                                                    vport.removeAll(true, true);
+                                                    vport.add(appGridWithButton); 
+
+                                                         }
+                                             }
+                                     },{
+       
+                                        xtype:'button',
+                                        itemId:'DeleteButtonId',
+                                        
+                                        cls:'button-primary',
+                                        margin:'10 10 0 10',
+                                        text:'Delete',  
+                                        listeners:{         
+                                            click: function(btn) {
+                                           Ext.Ajax.request({
+                                        
+                                            url : 'http://localhost:3000/users/deleteApp?app_id='+sessionStorage.getItem('app_id'), 
+                                            method: 'POST',
+                                            success: function ( result, request) { 
+                                                var appGridWithButton= new Ext.create('SmartApp.view.app.AppGridWithButton');      
+                                                                                                var vport=Ext.getCmp('contentRegionPanel');
+                                                                                                vport.removeAll(true, true);
+                                                                                                vport.add(appGridWithButton); 
+
+
+                                               
+
+                                            },
+                                            failure: function ( result, request) { 
+                                            console.log('on failure:::');
+                                                Ext.MessageBox.alert('Failed', 'Request failed'); 
+                                            } 
+                                        }); 
+
+
+
+
+                                            }
+                                            }
+                                        }
+                                        ]
+                                        },{   width: '100%',  
+                                             overflowY:'auto',
+                                                    itemId:'topinsightview',
+                                                    xtype:'container'
+                                            }
+                                ]
+
+                    });
+
+       
+
+this.callParent();
+     },
+    //column:2,
     
-    items: [{   width: '100%',
-     // height:'1000',
-     overflowY:'auto',
-            id:'topinsightview',
-            xtype:'container'}],
      onBoxReady:function(){
         console.log(this);
 
-        var insightname = sessionStorage.getItem('insightId');
+       
         //alert("box ready called");
 
 
          Ext.Ajax.request({                              
-                url : 'http://localhost:3000/users/getDashboardByName?name='+insightname, 
+                url : 'http://localhost:3000/users/getDashboardByName?name='+sessionStorage.getItem('insightId'), 
                 method: 'GET',
                 success: function ( result, request) {                                  
                     console.log(result);                                                
@@ -97,7 +235,7 @@ Ext.define('SmartApp.view.app.TopInsightView', {
                        
                     }
 
-                    var vport = Ext.getCmp('topinsightview');
+                    var vport =Ext.ComponentQuery.query('#topinsightview')[0];
                     vport.removeAll(true, true);
                     vport.add(chartsArr);
 

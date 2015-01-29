@@ -16969,8 +16969,8 @@ ul.x-tagfield-list.x-tagfield-singleselect {
   font-size: 13px;
   font-weight: normal;
   font-family: helvetica, arial, verdana, sans-serif;
-  border-width: 1px;
-  border-style: solid;
+  /* border-width: 1px; */
+  /* border-style: solid; */
 }
 
 /* line 621, ../../../../ext/packages/ext-theme-neutral/sass/src/panel/Panel.scss */

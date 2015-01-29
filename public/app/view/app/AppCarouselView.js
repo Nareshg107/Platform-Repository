@@ -24,7 +24,6 @@ id:'InsightsCarouselContent',
     
      ],
 
-
     itemSelector: 'div.thumb-wrap',
     singleSelect: true,
     cls: 'x-image-view',
@@ -67,7 +66,46 @@ id:'InsightsCarouselContent',
         itemclick : function(s, record, item, index, e, Opts){
             console.log("Item Click "+record.data.selecteddashboards);
             var firstinsight = record.data.selecteddashboards.split(",")[0]; 
+            var insightsArr = record.data.selecteddashboards.split(","); 
+           // alert(insightsArr);
+          //alert(insightsArr.length);
+        var insightsArrJson ={
+            fomatsarr: []
+                        };
+          for(var i in insightsArr) {
 
+                                var item = insightsArr[i];
+                               // alert('item'+item);
+                                insightsArrJson.fomatsarr.push({ 
+                                    "_id" : item,
+                                    "name" :item,
+                                   
+                             });
+                            }
+var out = JSON.stringify(insightsArr.map(function (el) {
+  return { name: el };
+}));
+
+
+           
+          
+            var app_id=record.data._id;
+              var app_name=record.data.name;
+              //alert('app_id:-'+app_id);
+             // alert('app_name:-'+app_name);
+            sessionStorage.removeItem('app_id');
+            sessionStorage.setItem('app_id',app_id);
+
+            sessionStorage.removeItem('app_name');
+            sessionStorage.setItem('app_name',app_name);
+
+            
+
+            
+            sessionStorage.removeItem('insightsArrJson');
+            sessionStorage.setItem('insightsArrJson',out);
+
+          
             sessionStorage.removeItem('insightId');
             sessionStorage.setItem('insightId',firstinsight);
 
