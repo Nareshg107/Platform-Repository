@@ -49,7 +49,7 @@ app.use(multer({
 }));
  app.use(function(req, res, next) {
     console.log("inside default:"+req.sessionID+":username"+req.session.username+"url:"+req.url);
-    console.log("req headers::"+JSON.stringify(req.headers));
+    //console.log("req headers::"+JSON.stringify(req.headers));
     //console.log("req cookies::"+JSON.stringify(req.cookies['connect.sid'])); 
     var cookieSIDStr= req.cookies['connect.sid'];
     if(cookieSIDStr!=null)
@@ -61,10 +61,9 @@ app.use(multer({
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,X-HTTP-Method-Override, Authorization,Origin,Accept-Version,Accept,Api-Version');
-    res.locals={'reqSessionId':req.sessionID};
+    
    // next();
     //res.write({'reqSessionId':req.sessionID});
-   
    if(req.url=='/users/login'||req.sessionID==sessIdfromCookie)
    {
     console.log('valid session:');
@@ -74,7 +73,7 @@ app.use(multer({
   {
     console.log('invalid session:');
     res.send({success:false,'msg':'Invalid Session'});
-}
+  }
 });
 
 app.use('/', routes);
