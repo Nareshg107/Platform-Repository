@@ -3,7 +3,7 @@ var router = express.Router();
 var Converter=require("csvtojson").core.Converter;
 var fs=require("fs");
 var monk = require('monk');
-var db = monk('localhost:27017/smartdb');
+var db = monk('localhost:27017/nodetest');
  var dateFormat = require('dateformat');
  var type = require('type-of-is');
  var mapreduce = require('mapred')();
@@ -13,7 +13,7 @@ var async = require("async");
 
 var db1= mongojs('localhost:27017/nodetest',['tempDataViewList','temp_results']);
 
-/* GET users listing. */
+
 router.post('/saveCollection', function(req, res,next) {
 	console.log("col name:"+req.param("collName"));
 	var collection_name = req.param("collName");
@@ -57,12 +57,13 @@ csvConverter.on("end_parsed",function(jsonObj){
 							doc['collection_id']=collection_id;
 						});
 						console.log("loop done");
-						db.get("CollectionData").insert(jsonObj,function(err)
-			    		{
-			    			if (err) return next(err);
-			    			console.log("collection data inserted successfully:");
-							res.send({success:true});
-			    		});
+						db1.collection("CollectionData").insert(jsonObj,function(err)
+						    		{
+						    			if (err) return next(err);
+						    			console.log('All records inserted');
+						    			res.send({success:true});
+						    		});							
+							
 						}
 						catch(ex)
 						{
@@ -94,6 +95,7 @@ catch(ex)
    }
 
 });	
+console.log('before parsing');
 fileStream.pipe(csvConverter);	
 }
 catch(ex)
@@ -101,7 +103,6 @@ catch(ex)
   	console.log('exception inside catch:'+ex.message); 
   	return next(ex);
 }
-
 });
 //delete collection
 router.post('/deleteCollection', function(req, res,next) {
@@ -1302,6 +1303,37 @@ router.get('/getDashboardByApp', function(req, res,next) {
 	});
 });
 
+/*function batchInsert()
+{
 
+								 // Batch insert
+						var batchSize =1000;
+						var cursorIndex =0;
+						
+								 var insertCollData = function(callback)
+								   {
+								   	if(cursorIndex>=noOfRecs)
+								   	{
+								   		callback();
+								   		return
+								   	}
+								   	var limit = cursorIndex+batchSize;
+								   	if(limit>noOfRecs)	
+								   		limit=noOfRecs;							
+									var recordArr = jsonObj.slice(cursorIndex,limit)
+									db1.collection("CollectionData").insert(recordArr,function(err)
+						    		{
+						    			if (err) return next(err);
+						    			//console.log("collection data inserted:");
+										cursorIndex= cursorIndex+batchSize;
+										insertCollData(callback);
+						    		});
+								}
+                             insertCollData(function()
+                             {
+                             	console.log('All records inserted');
+                             	return res.send({success:true});
+                             });
+}*/
 
 module.exports = router;

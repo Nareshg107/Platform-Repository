@@ -2,11 +2,9 @@ var express = require('express');
 var session = require('express-session');
 var cors = require('cors')
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var multer = require('multer');
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -32,6 +30,7 @@ app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
+//app.use(timeout(300000)); // relate to connect-timeout lib
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({secret: 'somesecrettokenhere',
@@ -48,6 +47,8 @@ app.use(multer({
  
 }));
  app.use(function(req, res, next) {
+  //console.log("isreqtimedout?:"+req.timedout);
+  res.connection.setTimeout(0);
     console.log("inside default:"+req.sessionID+":username"+req.session.username+"url:"+req.url);
     //console.log("req headers::"+JSON.stringify(req.headers));
     //console.log("req cookies::"+JSON.stringify(req.cookies['connect.sid'])); 
