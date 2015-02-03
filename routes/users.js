@@ -2,8 +2,6 @@ var express = require('express');
 var router = express.Router();
 var Converter=require("csvtojson").core.Converter;
 var fs=require("fs");
-var monk = require('monk');
-var db = monk('localhost:27017/nodetest');
  var dateFormat = require('dateformat');
  var type = require('type-of-is');
  var mapreduce = require('mapred')();
@@ -45,7 +43,7 @@ csvConverter.on("end_parsed",function(jsonObj){
 		    if(docs.length==0)
 		 		{
 		 			//insert collection
-		 			  db.get("CollectionList").insert({"user_id":user_id,"collection_name":collection_name,"source":"CSV","description":collection_desc,
+		 			  db1.collection("CollectionList").insert({"user_id":user_id,"collection_name":collection_name,"source":"CSV","description":collection_desc,
 						"no_of_records":noOfRecs,"update_date":newDate,"status":"Processed",
 						"xyAxis":xyAxis},function(err,doc){
 						if(err) return next(err);		
@@ -116,7 +114,7 @@ router.post('/deleteCollection', function(req, res,next) {
 			else
 			{
 				//var coll_Id = req.param("coll_Id");
-		  	db.get("CollectionList").remove({_id: collection_Id}, function(err){
+		  	db1.collection("CollectionList").remove({_id: mongojs.ObjectId(collection_Id)}, function(err){
 				if (err) return next(err);
 				console.log('collection entry removed:');
 				db1.collection("CollectionData").remove({'collection_id': mongojs.ObjectId(collection_Id)}, function(err){
@@ -134,7 +132,7 @@ router.post('/deleteCollection', function(req, res,next) {
 //delete data view
 router.post('/deleteDataView', function(req, res,next) {
 var dataview_id = req.param("dataview_id");
-  	db.get("DataViewList").remove({_id: dataview_id}, function(err){
+  	db1.collection("DataViewList").remove({_id: mongojs.ObjectId(dataview_id)}, function(err){
 		if (err) return next(err);		
 	});
 res.send({success:true});
@@ -203,7 +201,7 @@ router.get('/getDimensionsAndMeasures', function(req, res,next) {
 	console.log("activity_type"+activity_type);
 	//activity_type="modify";
 	console.log('collection_i1:'+collection_id);
-    db.get("CollectionList").findById(collection_id, function(err, doc){ 
+    db1.collection("CollectionList").findOne({_id:mongojs.ObjectId(collection_id)}, function(err, doc){ 
     			if (err)  return next(err);
     	var jsonObj = doc["xyAxis"];
  			res.json(jsonObj);
@@ -235,7 +233,7 @@ router.get('/visualizeData', function(req, res,next) {
            getfilteredData(docs,filterExpression,function(err,resultDataArr){
            	if (err) return next(err);	  	
            	try{
-     		db.get("tempDataViewList").insert(resultDataArr,function(err){//try javascript map reduce. write on ur own.
+     		db1.collection("tempDataViewList").insert(resultDataArr,function(err){//try javascript map reduce. write on ur own.
      		if (err) return next(err);
       		aggregateByMapReduce(dimension,measure,aggregation_type,function(err,docs){
       		if (err) return next(err);
@@ -257,7 +255,7 @@ router.get('/visualizeData', function(req, res,next) {
      }
      else
      {
-     	 db.get("tempDataViewList").insert(docs,function(err){//try javascript map reduce. write on ur own.
+     	 db1.collection("tempDataViewList").insert(docs,function(err){//try javascript map reduce. write on ur own.
      	 	if (err) {
 	  			   console.log('error message:'+err.message);
 	  			  return next(err);
@@ -296,7 +294,7 @@ router.get('/getChartForDB', function(req, res,next) {
 	try{
 	if(dvID!=null && dvID!=undefined&&dvID!='null' )
 	{
-	db.get("DataViewList").findById(dvID, function(err, doc){ 
+	db1.collection("DataViewList").findOne({_id:mongojs.ObjectId(dvID)}, function(err, doc){ 
 	  	if (err) return next(err);
 	  	try{
 			              var dimension = doc['group_by'];
@@ -317,7 +315,7 @@ router.get('/getChartForDB', function(req, res,next) {
 				      	try{				        
 					        getfilteredData(docs,filterExpression,function(err,resultDataArr){
 					         if (err) return next(err); 
-					         db.get("tempDataViewList").insert(resultDataArr,function(){//try javascript map reduce. write on ur own.
+					         db1.collection("tempDataViewList").insert(resultDataArr,function(){//try javascript map reduce. write on ur own.
 							         aggregateByMapReduce(dimension,measure,aggregation_type,function(err,docs){
 									     	if (err) return next(err);
 									     	res.json(docs);
@@ -334,7 +332,7 @@ router.get('/getChartForDB', function(req, res,next) {
 				     }
 				     else
 				     {
-				     	 db.get("tempDataViewList").insert(docs,function(){//try javascript map reduce. write on ur own.
+				     	 db1.collection("tempDataViewList").insert(docs,function(){//try javascript map reduce. write on ur own.
 				      aggregateByMapReduce(dimension,measure,aggregation_type,function(err,docs){
 				     	if (err) return next(err);
 				     	res.json(docs);
@@ -405,6 +403,7 @@ router.post('/saveDataViews', function(req, res) {
     	{
     		if (err) return next(err);
     	try{
+    		console.log('inside saveDV docs.length'+ docs.length); 
     	if(docs.length==1)
     	{
     		console.log('duplicate data view:');
@@ -415,7 +414,7 @@ router.post('/saveDataViews', function(req, res) {
  		 db1.collection('CollectionList').findOne({_id:mongojs.ObjectId(coll_id)},{"collection_name":true},function(err,doc){
  		 	if (err) return next(err);
  		 	 dataViewJson["source"] = doc["collection_name"];
-		    	db.get("DataViewList").insert(dataViewJson,function(err)
+		    	db1.collection("DataViewList").insert(dataViewJson,function(err)
 		    		{
 		    			if (err) return next(err);
 		    			console.log("insert success:");
@@ -435,6 +434,7 @@ router.post('/saveDataViews', function(req, res) {
     //Duplicate check
     	db1.collection('DataViewList').find({_id:{$ne:mongojs.ObjectId(dvID)},"dataview_name":eval('/^'+dvName+'/i')},{},function(err,docs){
     	if (err) return next(err);
+    	console.log('inside modify saveDV docs.length'+ docs.length);    	
     	if(docs.length==1)
     	{
     		console.log('duplicate data view:');
@@ -518,26 +518,6 @@ router.get('/getDataViews', function(req, res,next) {
  }
 
 });
-
-/*router.get('/prepareModifyDataView', function(req, res) { // add filter
-	var collection_id = req.param("collId");
-	var dataview_id = req.param("dataview_id");
-db.get("CollectionList").findById(collection_id, function(err, doc){ 
-var filterbyArr = doc["dataViews"][dataview_id]["filterby"];
- getFilterExpression(filterbyArr,function(err,filterExpression){
- 	if (err) return next(err);
-           console.log('filterExpression:'+filterExpression);
-           getfilteredData(doc["data"],filterExpression,function(err,resultDataArr){
-           	if (err) return next(err);
-			res.json(resultDataArr); // set doc[data], measures and dimensions in session		
-           });
-	      	
-	  	});
- 	
-	});
-	
-
-});*/
 
 function getfilteredData(dataArr,filterExpression,callback)
 {
@@ -738,7 +718,7 @@ router.post('/saveClientDetails', function(req, res,next) {
         }
     	else
  		 {
-    	db.get("clientList").insert(reqBodyJson,function(err)
+    	db1.collection("clientList").insert(reqBodyJson,function(err)
     		{
     			if (err) return next(err);
     			console.log("insert success:");
@@ -800,7 +780,7 @@ router.post('/saveUserDetails', function(req, res,next) {
         }
     	else
  		 {
-    	db.get("userList").insert(reqBodyJson,function(err)
+    	db1.collection("userList").insert(reqBodyJson,function(err)
     		{
     			if (err) return next(err);
     			console.log("insert success:");
@@ -837,14 +817,14 @@ router.post('/saveUserDetails', function(req, res,next) {
 });
 
 router.get('/getClientList', function(req, res,next) {
-	  db.get("clientList").find({},{},function(err,docs){
+	  db1.collection("clientList").find({},{},function(err,docs){
 	  	if (err) return next(err);
     res.json(docs);
   })
 });
 
 router.get('/getUserList', function(req, res,next) {
-	  db.get("userList").find({},{},function(err,docs){
+	  db1.collection("userList").find({},{},function(err,docs){
 	  	if (err) return next(err);
     res.json(docs);
   })
@@ -853,7 +833,7 @@ router.get('/getUserData', function(req, res,next) {
 	var user_id = req.param("user_id");
 	//user_id = '54916edbabd11f401003328c';
 	console.log('user_id:'+user_id);
- 	db.get("userList").findById(user_id, function(err, doc){
+ 	db1.collection("userList").findOne({_id:mongojs.ObjectId(user_id)}, {},function(err, doc){
  		if (err) return next(err);
  	res.json(doc); 	
 	});
@@ -863,7 +843,7 @@ router.get('/getClientData', function(req, res,next) {
 	var client_id = req.param("client_id");
 	//user_id = '54916edbabd11f401003328c';
 	console.log('client_id2:'+client_id);
-	db.get("clientList").findById(client_id, function(err, doc){
+	db1.collection("clientList").findOne({_id:mongojs.ObjectId(client_id)},{}, function(err, doc){
  		if (err) return next(err);
  	res.json(doc); 	
 	});
@@ -873,7 +853,7 @@ router.get('/getClientData', function(req, res,next) {
 router.post('/deleteUser', function(req, res,next) {
 	console.log('inside deleteuser:');
 	var user_id = req.param("user_id");
-  	db.get("userList").remove({_id: user_id}, function(err){
+  	db1.collection("userList").remove({_id: mongojs.ObjectId(user_id)}, function(err){
 		if (err) return next(err);
 		
 	});
@@ -883,11 +863,10 @@ router.post('/deleteUser', function(req, res,next) {
 router.post('/deleteClient', function(req, res,next) {
 	console.log('inside delete client:');
 	var client_id = req.param("client_id");
-  	db.get("clientList").remove({_id: client_id}, function(err){
+  	db1.collection("clientList").remove({_id:mongojs.ObjectId(client_id) }, function(err){
 		if (err) return next(err);
 		
 	});
-//db.get("CollectionList").insert({"collection_name":collection_name,"source":"CSV","description":collection_desc,"no_of_records":noOfRecs,"update_date":newDate,"data":jsonObj});
 console.log("p6:"+new Date());
 res.send({success:true});
 });
@@ -1026,7 +1005,7 @@ res.send({success:true});
 	 router.get('/testUrl', function(req, res) 
 	  {
 	  	var newDate = dateFormat();
-	  	 db.get("CollectionList").insert({"user_id":user_id,"collection_name":"mycoll12","source":"CSV","description":"test with 1m records",
+	  	 db1.collection("CollectionList").insert({"user_id":user_id,"collection_name":"mycoll12","source":"CSV","description":"test with 1m records",
 				"no_of_records":921600,"update_date":newDate,"status":"Processed","data":jsonObj,
 				"xyAxis":xyAxis},function(){
 				res.send({success:true});
@@ -1063,7 +1042,7 @@ res.send({success:true});
 	  });
 
 router.get('/appList', function(req, res,next) {	
-	 db.get('app').find({'apptype':'Custom'},{},function(err,docs){
+	 db1.collection('app').find({'apptype':'Custom'},{},function(err,docs){
 	 	if(err) return next(err);
 		 console.log("app collection list :"+docs); 
 		 res.json(docs);
@@ -1072,7 +1051,7 @@ router.get('/appList', function(req, res,next) {
 });
 
 router.get('/prepackagedAppList', function(req, res,next) {
-	 db.get('app').find({'apptype':'Pre-packaged'},{},function(err,docs){
+	 db1.collection('app').find({'apptype':'Pre-packaged'},{},function(err,docs){
 	 	if(err) return next(err);
 		 console.log("app collection list :"+docs); 
 		 res.json(docs);
@@ -1094,7 +1073,7 @@ router.post('/saveApp', function(req, res,next) {
    // console.log("client json1:"+JSON.stringify(req.body));
   
     if(activityType=='create') {
-    	db.get("app").insert(reqBodyJson,function(err){
+    	db1.collection("app").insert(reqBodyJson,function(err){
     		if(err) return next(err);
     			console.log("insert success:");
 				res.send({success:true});
@@ -1115,7 +1094,7 @@ router.get('/getAppData', function(req, res, next) {
 	var app_id = req.param("app_id");
 	//user_id = '54916edbabd11f401003328c';
 	console.log('app_id:'+app_id);
- 	db.get("app").findById(app_id, function(err, doc){
+ 	db1.collection("app").findOne({_id:mongojs.ObjectId(app_id)}, function(err, doc){
  		if(err) return next(err);
  		res.json(doc); 	
 	});
@@ -1125,7 +1104,7 @@ router.get('/getAppData', function(req, res, next) {
 router.post('/deleteApp', function(req, res, next) {
 	console.log('inside delete  app ');
 	var app_id = req.param("app_id");
-  	db.get("app").remove({_id: app_id}, function(err){
+  	db1.collection("app").remove({_id:mongojs.ObjectId(app_id)}, function(err){
   		if(err) return next(err);
   		res.send({success:true});
 		
@@ -1209,7 +1188,7 @@ res.send({success:true});
 }*/
 
 router.get('/dashboardList', function(req, res,next) {
-	 db.get('DashboardList').find({},{},function(err,docs){
+	 db1.collection('DashboardList').find({},{},function(err,docs){
 	 	if(err) return next(err);
 		 console.log("dashboard list :"+docs); 
 		 res.json(docs);
@@ -1226,7 +1205,7 @@ router.post('/saveDashboard', function(req, res,next) {
 
 		var reqBodyJson = req.body;
 		console.log("dashboard json1:"+JSON.stringify(req.body));
-    	db.get("DashboardList").insert(reqBodyJson,function(err){
+    	db1.collection("DashboardList").insert(reqBodyJson,function(err){
     		if(err) return next(err);
     			console.log("insert success:");
 				res.send({success:true});
@@ -1252,7 +1231,7 @@ router.post('/saveDashboard', function(req, res,next) {
 router.get('/getDashboardData', function(req, res,next) {
 	var dashboard_id = req.param("dashboard_id");
 	console.log('dashboard_id:'+dashboard_id);
- 	db.get("DashboardList").findById(dashboard_id, function(err, doc){
+ 	db1.collection("DashboardList").findOne({_id:mongojs.ObjectId(dashboard_id)}, function(err, doc){
  		if(err) return next(err);
  		res.json(doc); 	
 	});
@@ -1262,7 +1241,7 @@ router.get('/getDashboardData', function(req, res,next) {
 router.get('/getDashboardByName', function(req, res) {
 	var dashboard_name = req.param("name");
 	console.log('dashboard_name:--'+dashboard_name);
-	db.get("DashboardList").find({name: dashboard_name}, function(err, doc){
+	db1.collection("DashboardList").find({name: dashboard_name},{}, function(err, doc){
 		res.json(doc); 			
 	});
 });
@@ -1271,7 +1250,7 @@ router.get('/getDashboardByName', function(req, res) {
 router.post('/deleteDashboard', function(req, res) {
 	console.log('inside delete  dashboard1:-- ');
 	var dashboard_id = req.param("dashboard_id");
-  	db.get("DashboardList").remove({_id: dashboard_id}, function(err){
+  	db1.collection("DashboardList").remove({_id:mongojs.ObjectId(dashboard_id)}, function(err){
   		if(err) return next(err);
         res.send({success:true});		
 	});
@@ -1281,7 +1260,7 @@ router.get('/getDataViewFilter', function(req, res,next) {
 	var dataview_id = req.param("dataview_id");
 	var collection_id = req.param("collection_id");
 
- 	db.get("DataViewList").findById(dataview_id, function(err, doc){ 
+ 	db1.collection("DataViewList").findOne({_id:mongojs.ObjectId(dataview_id)}, function(err, doc){ 
  		if(err) return next(err);
 		var filterbyArr = doc["filterby"];
 		console.log(filterbyArr);

@@ -13,8 +13,6 @@
     "express": "~4.9.0",
     "jade": "~1.6.0",
     "mongodb": "*",
-    "mongoskin": "*",
-    "monk": "*",
     "mongojs":"*",
     "morgan": "~1.3.0",
     "multer": "^0.1.6",
