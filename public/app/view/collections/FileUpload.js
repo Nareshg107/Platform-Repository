@@ -72,7 +72,7 @@ Ext.define('SmartApp.view.collections.FileUpload', {
 							if(form.isValid()){
 								form.submit({								
 									url: uploadurl,
-									waitMsg: 'Uploading your File...',	
+								//	waitMsg: 'Uploading your File...',	
 									success: function(response) 
 									{	
 									console.log('on success:::');

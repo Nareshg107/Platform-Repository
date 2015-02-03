@@ -12,12 +12,44 @@ Ext.Ajax.on("requestcomplete", function(conn, result, options){
 	res = eval('(' + response + ')');
 	//alert('resmsg:'+res.msg);
 	if(res != undefined || res!='' && (res.msg != undefined || res.msg != '')) {
+		
+		var appErrorMassage;
+		var bodyMsg;
+		
+		if(res.msg!=undefined)
+		{
+			var massage=res.msg;
+			appErrorMassage=massage.substring(0,17);
+			bodyMsg=massage.substring(19,massage.length);
+			if(appErrorMassage=='Application Error')
+					{
+							Ext.Msg.alert(appErrorMassage,bodyMsg);
+						/*	var createDataViewwithButton= new Ext.create('SmartApp.view.collections.CreateDataCollectionWindow');		
+							var vport=Ext.getCmp('contentRegionPanel');
+							vport.removeAll(true, true);
+							vport.add(createDataViewwithButton.Show());*/
+							
+
+					}	
+			
+		}
 		if(res.msg == "Invalid Session") {
-			 sessionStorage.removeItem('sessionID');
-			 alert('Invalid Session. Please login again');					                      	
-			 window.location="/index.html";
-		}		
-	}      
+			Ext.Msg.alert(res.msg,'Please login to start a new session.',
+			 	function (btn, text) {
+                if (btn=='ok') {  
+                	sessionStorage.removeItem('sessionID');             
+  					window.location="/index.html";
+                    // TODO: Show logon form here.
+
+                }
+
+            }
+
+        );
+			 					                      		
+		} 	
+	}
+	     
 });
 Ext.define('SmartApp.view.home.Home',{
 extend : 'Ext.container.Viewport',
